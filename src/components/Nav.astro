@@ -1,0 +1,75 @@
+---
+type NavLink = { label: string; href: string }
+
+const links: readonly NavLink[] = [
+  { label: 'work', href: '#work' },
+  { label: 'about', href: '#about' },
+  { label: 'contact', href: '#contact' }
+] as const
+---
+<header class="nav" data-nav data-scrolled="false" role="banner">
+  <div class="nav__inner wrap">
+    <a class="nav__mark font-mono text-xs" href="#top" data-nav-item aria-label="justxxi, return to top">justxxi</a>
+    <nav class="nav__links" aria-label="primary">
+      {links.map((link, i) => (
+        <>
+          <a class="nav-link font-mono text-xs" href={link.href} data-nav-item>{link.label}</a>
+          {i < links.length - 1 ? <span class="nav-sep font-mono text-xs" aria-hidden="true">·</span> : null}
+        </>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+      background 0.6s ease,
+      border-color 0.6s ease,
+      backdrop-filter 0.6s ease,
+      -webkit-backdrop-filter 0.6s ease;
+    will-change: background, border-color;
+  }
+
+  .nav[data-scrolled='true'] {
+    background: color-mix(in oklch, var(--color-ground) 86%, transparent);
+    backdrop-filter: blur(12px) saturate(1.05);
+    -webkit-backdrop-filter: blur(12px) saturate(1.05);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .nav__mark {
+    color: var(--color-ink);
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    position: relative;
+    display: inline-block;
+    padding: 0.25rem 0;
+  }
+
+  .nav__links {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+  }
+
+  .nav__links .nav-link {
+    color: var(--color-ink);
+    text-transform: lowercase;
+  }
+</style>

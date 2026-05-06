@@ -1,0 +1,73 @@
+---
+---
+<section class="hero" id="top" aria-label="introduction">
+  <div class="hero__inner wrap">
+    <h1 class="hero-title font-display text-display will-split" aria-label="justxxi">justxxi</h1>
+    <p class="hero-subtitle font-mono text-sm" aria-label="disciplines">
+      python <span aria-hidden="true">·</span> go <span aria-hidden="true">·</span> ai systems <span aria-hidden="true">·</span> privacy tools
+    </p>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true">
+    <span class="hero-scroll-label font-mono text-xs">scroll</span>
+    <span class="scroll-mark"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding-top: 56px;
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 3vw, 2rem);
+    text-align: center;
+  }
+
+  .hero-title {
+    color: var(--color-ink);
+    text-transform: lowercase;
+    max-width: 100%;
+    font-feature-settings: 'ss01', 'liga', 'dlig', 'swsh';
+  }
+
+  .hero-subtitle {
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.2em;
+    font-size: var(--text-sm);
+    opacity: 1;
+  }
+
+  .hero-subtitle span {
+    display: inline-block;
+    padding: 0 0.35em;
+    opacity: 0.5;
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: clamp(2rem, 4vh, 3rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .hero-scroll-label {
+    color: var(--color-ink-muted);
+    opacity: 0.4;
+    text-transform: lowercase;
+    letter-spacing: 0.25em;
+  }
+</style>

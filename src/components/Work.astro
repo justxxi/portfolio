@@ -1,0 +1,178 @@
+---
+type Project = {
+  number: string
+  name: string
+  description: string
+  tags: readonly string[]
+}
+
+const projects: readonly Project[] = [
+  {
+    number: '01',
+    name: 'meridian',
+    description: 'autonomous market intelligence agent.',
+    tags: ['python', 'go', 'ai', 'langgraph', 'pgvector']
+  },
+  {
+    number: '02',
+    name: 'toxiguard',
+    description: 'ai-powered telegram bot for real-time toxicity detection and group moderation.',
+    tags: ['python', 'ai', 'nlp', 'telegram']
+  },
+  {
+    number: '03',
+    name: 'consul',
+    description: 'silent advisor. sovereignty over your data.',
+    tags: ['python', 'privacy', 'local']
+  },
+  {
+    number: '04',
+    name: 'phantom',
+    description: 'cryptographically secure password and passphrase generator.',
+    tags: ['python', 'cli', 'security', 'cryptography']
+  },
+  {
+    number: '05',
+    name: 'hush',
+    description: 'conceal text within pixels.',
+    tags: ['python', 'steganography', 'cli']
+  },
+  {
+    number: '06',
+    name: 'umbra',
+    description: 'converts images to ascii symbols.',
+    tags: ['python', 'cli', 'ascii', 'minimalism']
+  }
+] as const
+---
+<section class="work" id="work" data-section aria-labelledby="work-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="font-mono text-xs section-eyebrow" aria-hidden="true">— selected work</p>
+      <h2 class="section-title font-display text-h2 will-split" id="work-title">selected work</h2>
+      <span class="section-rule" aria-hidden="true"></span>
+    </div>
+
+    <ol class="work__list" role="list">
+      {projects.map((p) => (
+        <li class="work__item" role="listitem">
+          <article class="project" data-hover>
+            <span class="project__counter" aria-hidden="true"></span>
+            <span class="project__number">{p.number}</span>
+            <div class="project__body">
+              <h3 class="project__name">{p.name}</h3>
+              <p class="project__desc">{p.description}</p>
+            </div>
+            <ul class="project__tags" aria-label={`${p.name} stack`}>
+              {p.tags.map((tag) => (
+                <li class="tag">{tag}</li>
+              ))}
+            </ul>
+          </article>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .work {
+    position: relative;
+    padding-block: var(--section-gap);
+  }
+
+  .section-head {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.75rem);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .section-eyebrow {
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.25em;
+    opacity: 0.7;
+  }
+
+  .section-title {
+    color: var(--color-ink);
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+
+  .work__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .work__item {
+    list-style: none;
+  }
+
+  .project {
+    position: relative;
+  }
+
+  .project:first-of-type {
+    border-top: none;
+  }
+
+  .project__counter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: var(--color-line);
+    overflow: hidden;
+  }
+
+  .project__counter::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-ink);
+    transform-origin: top center;
+    transform: scaleY(0);
+    animation: project-counter-fill linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 55%;
+  }
+
+  @keyframes project-counter-fill {
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .project {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      row-gap: 1.25rem;
+    }
+
+    .project__number {
+      grid-column: 1 / span 6;
+      padding-top: 0;
+    }
+
+    .project__body {
+      grid-column: 1 / span 6;
+    }
+
+    .project__tags {
+      grid-column: 1 / span 6;
+      justify-content: flex-start;
+      padding-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project__counter::after {
+      transform: scaleY(1);
+      animation: none;
+    }
+  }
+</style>

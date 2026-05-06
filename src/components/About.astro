@@ -1,0 +1,130 @@
+---
+const capabilities: readonly string[] = [
+  'autonomous ai agents',
+  'natural language processing',
+  'cryptography & security',
+  'cli tooling',
+  'data pipeline architecture',
+  'langgraph / pgvector',
+  'steganography',
+  'system design'
+] as const
+---
+<section class="about" id="about" data-section aria-labelledby="about-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="font-mono text-xs section-eyebrow" aria-hidden="true">— a note</p>
+      <h2 class="section-title font-display text-h2 will-split" id="about-title">about</h2>
+      <span class="section-rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="about__grid">
+      <div class="about__col about__col--text">
+        <p class="about-body font-mono">
+          i build tools that are silent by design. most of what i make is invisible —
+          that&rsquo;s the point.
+        </p>
+        <p class="about-body font-mono">
+          i think about privacy, autonomy, and the aesthetics of utility. tools should
+          disappear into the task. i work in python and go, use ai as infrastructure,
+          not magic.
+        </p>
+      </div>
+
+      <div class="about__col about__col--caps">
+        <ul class="caps" role="list">
+          {capabilities.map((cap) => (
+            <li class="caps__item font-mono text-xs" data-cap>
+              <span class="caps__dash" aria-hidden="true">&ndash;</span>
+              <span class="caps__label">{cap}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding-block: var(--section-gap);
+  }
+
+  .section-head {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.75rem);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .section-eyebrow {
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.25em;
+    opacity: 0.7;
+  }
+
+  .section-title {
+    color: var(--color-ink);
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+
+  .about__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+    row-gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .about__col--text {
+    grid-column: 1 / span 7;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .about__col--caps {
+    grid-column: 8 / span 5;
+    padding-top: 0.5rem;
+  }
+
+  .about-body {
+    font-size: var(--text-sm);
+    line-height: 1.8;
+    color: var(--color-ink);
+    max-width: 520px;
+    letter-spacing: 0.03em;
+  }
+
+  .caps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .caps__item {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    align-items: baseline;
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.12em;
+  }
+
+  .caps__dash {
+    color: var(--color-ink-muted);
+    opacity: 0.5;
+  }
+
+  .caps__label {
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 768px) {
+    .about__col--text,
+    .about__col--caps {
+      grid-column: 1 / span 12;
+    }
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import '../styles/global.css'
+import Cursor from '../components/Cursor.astro'
+
+type Props = {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'justxxi — python · go · ai systems',
+  description = 'tools that are silent by design. python, go, ai systems, privacy tools.'
+}: Props = Astro.props
+---
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f9f8f5" />
+    <meta name="description" content={description} />
+    <meta name="author" content="justxxi" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='4' height='4' x='6' y='6' fill='%231a1a1a'/%3E%3C/svg%3E" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400&family=Geist+Mono:wght@300..500&display=swap"
+    />
+
+    <title>{title}</title>
+
+    <noscript>
+      <link rel="stylesheet" href="/noscript.css" />
+    </noscript>
+  </head>
+  <body>
+    <span class="reveal-line" aria-hidden="true"></span>
+    <Cursor />
+    <slot />
+    <script>
+      import '../scripts/animations'
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+body {
+  opacity: 1 !important;
+}
+
+.will-split {
+  visibility: visible !important;
+}
+
+.section-rule {
+  transform: scaleX(1) !important;
+}
+
+.reveal-line,
+.scroll-mark,
+.cursor {
+  display: none !important;
+}
+
+html,
+html * {
+  cursor: auto !important;
+}
