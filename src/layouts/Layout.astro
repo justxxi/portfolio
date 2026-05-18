@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css'
-import Cursor from '../components/Cursor.astro'
 
 type Props = {
   title?: string
@@ -9,7 +8,7 @@ type Props = {
 }
 
 const {
-  title = 'justxxi — python · go · ai systems',
+  title = 'justxxi — full-stack developer',
   description = 'tools that are silent by design. python, go, ai systems, privacy tools.',
   path = Astro.url.pathname
 }: Props = Astro.props
@@ -17,15 +16,14 @@ const {
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://justxxii.localplayer.dev'
 const canonical = `${siteUrl}${path}`
 const ogImage = `${siteUrl}/og.svg`
-const fontsHref = 'https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400&family=Geist+Mono:wght@300..500&display=swap'
 ---
 <!doctype html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f9f8f5" />
+    <meta name="theme-color" content="#fbfbfd" />
     <meta name="description" content={description} />
     <meta name="author" content="justxxi" />
     <meta name="robots" content="index, follow" />
@@ -40,7 +38,7 @@ const fontsHref = 'https://fonts.googleapis.com/css2?family=Cormorant:wght@300;4
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="justxxi — python, go, ai systems, privacy tools" />
+    <meta property="og:image:alt" content="justxxi — full-stack developer" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -51,25 +49,11 @@ const fontsHref = 'https://fonts.googleapis.com/css2?family=Cormorant:wght@300;4
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href={fontsHref} />
-    <link rel="stylesheet" href={fontsHref} media="print" data-fonts />
-    <script>
-      const el = document.querySelector<HTMLLinkElement>('link[data-fonts]')
-      if (el) el.media = 'all'
-    </script>
-    <noscript>
-      <link rel="stylesheet" href={fontsHref} />
-      <link rel="stylesheet" href="/noscript.css" />
-    </noscript>
-
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main">skip to content</a>
-    <Cursor />
+    <a class="skip-link" href="#main">Skip to content</a>
     <slot />
     <script>
       import '../scripts/animations'

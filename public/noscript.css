@@ -1,19 +1,15 @@
 .will-split {
   opacity: 1 !important;
-  visibility: visible !important;
 }
 
-.section-rule {
-  transform: scaleX(1) !important;
-}
-
-.reveal-line,
-.scroll-mark,
-.cursor {
-  display: none !important;
-}
-
-html,
-html * {
-  cursor: auto !important;
+.hero__title,
+.hero__lead,
+.hero__eyebrow,
+.hero__actions,
+.nav__mark,
+.nav__link {
+  animation: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
 }

@@ -12,40 +12,35 @@ const capabilities: readonly string[] = [
 ---
 <section class="about" id="about" data-section aria-labelledby="about-title">
   <div class="wrap">
-    <div class="section-head">
-      <p class="font-mono text-xs section-eyebrow" aria-hidden="true">— a note</p>
-      <h2 class="section-title font-display text-h2 will-split" id="about-title">about</h2>
-      <span class="section-rule" aria-hidden="true"></span>
-    </div>
+    <header class="section-head">
+      <p class="eyebrow">about</p>
+      <h2 class="section-title text-h2 font-display will-split" id="about-title">
+        Quiet precision.<br />
+        <span class="muted">Built to disappear.</span>
+      </h2>
+    </header>
 
     <div class="about__grid">
-      <div class="about__col about__col--text">
-        <p class="about-position font-mono text-sm">
-          full-stack developer, 3+ years · open to remote roles and collaborations.
-        </p>
+      <div class="about__lead">
         <!--email_off-->
-        <p class="about-body font-mono">
-          i build tools that are silent by design. most of what i make is invisible —
-          that&rsquo;s the point.
+        <p class="about-body">
+          I build tools that are silent by design. Most of what I make is invisible &mdash; that&rsquo;s the point.
         </p>
-        <p class="about-body font-mono">
-          i think about privacy, autonomy, and the aesthetics of utility. tools should
-          disappear into the task. i work in python and go, use ai as infrastructure,
-          not magic.
+        <p class="about-body">
+          I think about privacy, autonomy, and the aesthetics of utility. Tools should disappear into the task. I work in Python and Go, and treat AI as infrastructure, not magic.
         </p>
         <!--/email_off-->
+        <p class="about-meta">Full-stack developer, 3+ years. Open to remote roles and collaborations.</p>
       </div>
 
-      <div class="about__col about__col--caps">
+      <aside class="about__caps card" aria-label="capabilities">
+        <p class="caps__label">Capabilities</p>
         <ul class="caps" role="list">
           {capabilities.map((cap) => (
-            <li class="caps__item font-mono text-xs" data-cap>
-              <span class="caps__dash" aria-hidden="true">&ndash;</span>
-              <span class="caps__label">{cap}</span>
-            </li>
+            <li class="caps__item" data-cap>{cap}</li>
           ))}
         </ul>
-      </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -53,91 +48,106 @@ const capabilities: readonly string[] = [
 <style>
   .about {
     padding-block: var(--section-gap);
+    background: var(--color-surface-2);
   }
 
   .section-head {
-    display: grid;
-    gap: clamp(1rem, 2vw, 1.75rem);
-    margin-bottom: clamp(3rem, 6vw, 5rem);
-  }
-
-  .section-eyebrow {
-    color: var(--color-ink-muted);
-    text-transform: lowercase;
-    letter-spacing: 0.25em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
   .section-title {
     color: var(--color-ink);
-    text-transform: lowercase;
-    font-weight: 300;
+  }
+
+  .section-title .muted {
+    color: var(--color-ink-muted);
   }
 
   .about__grid {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(1.5rem, 3vw, 3rem);
-    row-gap: clamp(2.5rem, 5vw, 4rem);
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: start;
   }
 
-  .about__col--text {
-    grid-column: 1 / span 7;
-    display: grid;
+  .about__lead {
+    display: flex;
+    flex-direction: column;
     gap: 1.25rem;
-  }
-
-  .about__col--caps {
-    grid-column: 8 / span 5;
     padding-top: 0.5rem;
   }
 
-  .about-position {
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    color: var(--color-ink-muted);
-    letter-spacing: 0.05em;
-    text-transform: lowercase;
-    margin-bottom: 0.5rem;
+  .about-body {
+    font-size: var(--text-lead);
+    line-height: 1.5;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+    max-width: 38ch;
   }
 
-  .about-body {
+  .about-meta {
     font-size: var(--text-sm);
-    line-height: 1.8;
-    color: var(--color-ink);
-    max-width: 520px;
-    letter-spacing: 0.03em;
+    color: var(--color-ink-muted);
+    margin-top: 0.75rem;
+  }
+
+  .about__caps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .caps__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-muted);
   }
 
   .caps {
     list-style: none;
-    padding: 0;
-    margin: 0;
     display: grid;
-    gap: 0.9rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem 1rem;
   }
 
   .caps__item {
-    display: grid;
-    grid-template-columns: 1.75rem 1fr;
-    align-items: baseline;
-    color: var(--color-ink-muted);
-    text-transform: lowercase;
-    letter-spacing: 0.12em;
+    font-size: var(--text-sm);
+    color: var(--color-ink);
+    position: relative;
+    padding-left: 1rem;
   }
 
-  .caps__dash {
-    color: var(--color-ink-muted);
-    opacity: 0.5;
+  .caps__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-accent);
   }
 
-  .caps__label {
-    color: var(--color-ink-muted);
+  @media (max-width: 820px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .caps {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
-  @media (max-width: 768px) {
-    .about__col--text,
-    .about__col--caps {
-      grid-column: 1 / span 12;
+  @media (max-width: 480px) {
+    .caps {
+      grid-template-columns: 1fr;
     }
   }
 </style>

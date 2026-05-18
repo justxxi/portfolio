@@ -1,48 +1,50 @@
 ---
-const year: number = new Date().getFullYear()
-
-type Link = { label: string; href: string }
+type Link = {
+  label: string
+  value: string
+  href: string
+  hint: string
+}
 
 const links: readonly Link[] = [
-  { label: 'email', href: 'mailto:wyurtrft@proton.me' },
-  { label: 'telegram', href: 'https://t.me/nevercriesonlylaugh' },
-  { label: 'linkedin', href: 'https://www.linkedin.com/in/cryinparis' },
-  { label: 'github', href: 'https://github.com/justxxi' }
+  { label: 'Email', value: 'wyurtrft@proton.me', href: 'mailto:wyurtrft@proton.me', hint: 'preferred for work inquiries' },
+  { label: 'Telegram', value: '@nevercriesonlylaugh', href: 'https://t.me/nevercriesonlylaugh', hint: 'fastest reply' },
+  { label: 'LinkedIn', value: 'in/cryinparis', href: 'https://www.linkedin.com/in/cryinparis', hint: 'professional network' },
+  { label: 'GitHub', value: 'justxxi', href: 'https://github.com/justxxi', hint: 'open source work' }
 ] as const
 ---
 <section class="contact" id="contact" data-section aria-labelledby="contact-title">
   <div class="wrap">
-    <div class="section-head">
-      <p class="font-mono text-xs section-eyebrow" aria-hidden="true">— contact</p>
-      <h2 class="section-title font-display text-h2 will-split" id="contact-title">contact</h2>
-      <span class="section-rule" aria-hidden="true"></span>
-    </div>
+    <header class="section-head">
+      <p class="eyebrow">contact</p>
+      <h2 class="section-title text-h2 font-display will-split" id="contact-title">
+        Let&rsquo;s build something quiet.
+      </h2>
+      <p class="section-sub text-lead">
+        Open to remote roles, collaborations, and problems worth solving.
+      </p>
+    </header>
 
-    <div class="contact__grid">
-      <div class="contact__body">
-        <p class="contact__lead font-mono">
-          open to remote roles, collaborations, and interesting problems.
-          if you are building something that requires quiet precision, reach out.
-        </p>
-      </div>
-
-      <ul class="contact__links" role="list">
-        {links.map((link) => (
-          <li class="contact__item" role="listitem">
-            <a
-              class="contact__link font-mono text-sm"
-              href={link.href}
-              target={link.href.startsWith('mailto:') ? undefined : '_blank'}
-              rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-              data-hover
-            >
-              <span class="contact__label">{link.label}</span>
-              <span class="contact__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul class="contact__grid" role="list">
+      {links.map((link) => (
+        <li role="listitem">
+          <a
+            class="contact-card card"
+            href={link.href}
+            target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+            rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+            aria-label={`${link.label}: ${link.value}`}
+          >
+            <div class="contact-card__top">
+              <span class="contact-card__label">{link.label}</span>
+              <span class="contact-card__arrow" aria-hidden="true">›</span>
+            </div>
+            <p class="contact-card__value">{link.value}</p>
+            <p class="contact-card__hint">{link.hint}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
 
@@ -52,108 +54,75 @@ const links: readonly Link[] = [
   }
 
   .section-head {
-    display: grid;
-    gap: clamp(1rem, 2vw, 1.75rem);
-    margin-bottom: clamp(3rem, 6vw, 5rem);
-  }
-
-  .section-eyebrow {
-    color: var(--color-ink-muted);
-    text-transform: lowercase;
-    letter-spacing: 0.25em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
   .section-title {
     color: var(--color-ink);
-    text-transform: lowercase;
-    font-weight: 300;
+    max-width: 18ch;
+  }
+
+  .section-sub {
+    color: var(--color-ink-muted);
+    max-width: 42ch;
   }
 
   .contact__grid {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(1.5rem, 3vw, 3rem);
-    row-gap: clamp(2.5rem, 5vw, 4rem);
-  }
-
-  .contact__body {
-    grid-column: 1 / span 7;
-  }
-
-  .contact__lead {
-    font-size: var(--text-sm);
-    line-height: 1.8;
-    color: var(--color-ink);
-    max-width: 520px;
-    letter-spacing: 0.03em;
-  }
-
-  .contact__links {
-    grid-column: 8 / span 5;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(1rem, 1.6vw, 1.5rem);
     list-style: none;
     padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0;
-    border-top: 1px solid var(--color-line);
   }
 
-  .contact__item {
-    list-style: none;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .contact__link {
+  .contact-card {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    padding: 1rem 0;
-    color: var(--color-ink-muted);
-    text-transform: lowercase;
-    letter-spacing: 0.12em;
-    transition: color 0.4s ease;
-    position: relative;
-  }
-
-  .contact__link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: var(--color-ink);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .contact__link:hover,
-  .contact__link:focus-visible {
+    flex-direction: column;
+    gap: 0.5rem;
+    cursor: pointer;
     color: var(--color-ink);
   }
 
-  .contact__link:hover::after,
-  .contact__link:focus-visible::after {
-    transform: scaleX(1);
+  .contact-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .contact__arrow {
-    opacity: 0.3;
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    display: inline-block;
+  .contact-card__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-muted);
   }
 
-  .contact__link:hover .contact__arrow,
-  .contact__link:focus-visible .contact__arrow {
-    opacity: 1;
-    transform: translateX(4px);
+  .contact-card__arrow {
+    color: var(--color-ink-muted);
+    font-size: 1.2rem;
+    transition: transform 0.4s var(--ease-apple), color 0.3s var(--ease-apple);
   }
 
-  @media (max-width: 768px) {
-    .contact__body,
-    .contact__links {
-      grid-column: 1 / span 12;
-    }
+  .contact-card:hover .contact-card__arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+
+  .contact-card__value {
+    font-size: var(--text-lead);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+  }
+
+  .contact-card__hint {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    margin-top: 0.25rem;
   }
 </style>

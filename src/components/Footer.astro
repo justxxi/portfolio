@@ -1,51 +1,65 @@
 ---
 const year: number = new Date().getFullYear()
 ---
-<footer class="footer" data-footer role="contentinfo">
+<footer class="footer" role="contentinfo">
   <div class="wrap footer__inner">
-    <span class="footer__year font-mono text-xs" data-footer-item>© {year} justxxi</span>
-    <a
-      class="footer-link font-mono text-xs"
-      href="https://github.com/justxxi/portfolio"
-      target="_blank"
-      rel="noopener noreferrer"
-      data-footer-item
-      data-hover
-    >source</a>
-    <a class="footer-link font-mono text-xs" href="#top" data-footer-item data-hover>back to top</a>
+    <p class="footer__copy">Copyright &copy; {year} justxxi. All rights reserved.</p>
+    <nav class="footer__links" aria-label="footer">
+      <a class="footer__link" href="https://github.com/justxxi/portfolio" target="_blank" rel="noopener noreferrer">Source</a>
+      <span class="footer__sep" aria-hidden="true">|</span>
+      <a class="footer__link" href="#top">Back to top</a>
+    </nav>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: clamp(5vh, 8vh, 10vh);
-    border-top: 1px solid var(--color-line);
+    padding-block: clamp(1.5rem, 3vh, 2.5rem);
+    background: var(--color-surface-2);
+    border-top: 1px solid var(--color-line-soft);
   }
 
   .footer__inner {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: 1rem;
     flex-wrap: wrap;
   }
 
-  .footer__year {
+  .footer__copy {
+    font-size: 0.75rem;
     color: var(--color-ink-muted);
-    letter-spacing: 0.15em;
-    text-transform: lowercase;
+    letter-spacing: -0.005em;
   }
 
-  .footer .footer-link {
-    text-transform: lowercase;
+  .footer__links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footer__link {
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+    transition: color 0.3s var(--ease-apple);
+  }
+
+  .footer__link:hover,
+  .footer__link:focus-visible {
+    color: var(--color-accent);
+  }
+
+  .footer__sep {
+    color: var(--color-line);
+    font-size: 0.75rem;
   }
 
   @media (max-width: 540px) {
     .footer__inner {
-      justify-content: center;
-      gap: 1rem;
       flex-direction: column;
       align-items: center;
+      text-align: center;
     }
   }
 </style>

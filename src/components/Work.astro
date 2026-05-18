@@ -1,202 +1,193 @@
 ---
 type Project = {
-  number: string
   name: string
+  tagline: string
   description: string
-  detail: string
   tags: readonly string[]
   repo: string
 }
 
 const projects: readonly Project[] = [
   {
-    number: '01',
     name: 'meridian',
-    description: 'autonomous market intelligence agent.',
-    detail: 'ingests 40+ public and private data sources, ranks signals by relevance, and delivers structured briefings. built with langgraph state machines and pgvector for semantic retrieval. processes ~10k documents per run autonomously.',
-    tags: ['python', 'go', 'ai', 'langgraph', 'pgvector'],
+    tagline: 'autonomous market intelligence.',
+    description: 'ingests 40+ public and private data sources, ranks signals by relevance, and delivers structured briefings. langgraph state machines, pgvector retrieval, ~10k documents per run.',
+    tags: ['python', 'go', 'langgraph', 'pgvector'],
     repo: 'https://github.com/justxxi/meridian'
   },
   {
-    number: '02',
     name: 'toxiguard',
-    description: 'ai-powered telegram bot for real-time toxicity detection and group moderation.',
-    detail: 'deployed in active communities up to 5k members. classifies messages across six toxicity dimensions with sub-100ms inference. auto-deletes, warns, or escalates based on configurable thresholds.',
-    tags: ['python', 'ai', 'nlp', 'telegram'],
+    tagline: 'real-time toxicity detection.',
+    description: 'telegram bot deployed in communities up to 5k members. classifies six toxicity dimensions with sub-100ms inference. auto-moderation by configurable threshold.',
+    tags: ['python', 'nlp', 'telegram'],
     repo: 'https://github.com/justxxi/toxiguard'
   },
   {
-    number: '03',
     name: 'consul',
-    description: 'silent advisor. sovereignty over your data.',
-    detail: 'fully local llm assistant with zero external api calls. runs on consumer hardware, stores context in sqlite, and never phones home. designed for users who treat their data as property.',
+    tagline: 'sovereignty over your data.',
+    description: 'fully local llm assistant. zero external api calls. runs on consumer hardware, stores context in sqlite, never phones home.',
     tags: ['python', 'privacy', 'local'],
     repo: 'https://github.com/justxxi/consul'
   },
   {
-    number: '04',
     name: 'phantom',
-    description: 'cryptographically secure password and passphrase generator.',
-    detail: 'generates diceware-style passphrases and high-entropy passwords using os.urandom. estimates crack time via entropy calculation. no network, no storage, no dependencies beyond standard library.',
-    tags: ['python', 'cli', 'security', 'cryptography'],
+    tagline: 'cryptographic passphrases.',
+    description: 'diceware-style passphrases and high-entropy passwords via os.urandom. entropy estimation, no network, no storage, standard library only.',
+    tags: ['python', 'cli', 'cryptography'],
     repo: 'https://github.com/justxxi/phantom'
   },
   {
-    number: '05',
     name: 'hush',
-    description: 'conceal text within pixels.',
-    detail: 'embeds up to 10kb of plaintext inside a png without visible artifacts. uses lsb substitution with aes-256 encryption and passphrase-derived keys. the payload survives re-compression where possible.',
-    tags: ['python', 'steganography', 'cli'],
+    tagline: 'conceal text within pixels.',
+    description: 'embeds up to 10kb of plaintext inside a png. lsb substitution with aes-256, passphrase-derived keys. survives re-compression where possible.',
+    tags: ['python', 'steganography'],
     repo: 'https://github.com/justxxi/hush'
   },
   {
-    number: '06',
     name: 'umbra',
-    description: 'converts images to ascii symbols.',
-    detail: 'maps luminance to a curated unicode glyph set with configurable density and aspect ratio correction. handles images up to 4k resolution in under a second. outputs raw text or html with inline styling.',
-    tags: ['python', 'cli', 'ascii', 'minimalism'],
+    tagline: 'images to ascii.',
+    description: 'maps luminance to a curated unicode glyph set with configurable density and aspect correction. handles 4k images in under a second.',
+    tags: ['python', 'cli', 'ascii'],
     repo: 'https://github.com/justxxi/umbra'
   }
 ] as const
 ---
 <section class="work" id="work" data-section aria-labelledby="work-title">
   <div class="wrap">
-    <div class="section-head">
-      <p class="font-mono text-xs section-eyebrow" aria-hidden="true">— selected work</p>
-      <h2 class="section-title font-display text-h2 will-split" id="work-title">selected work</h2>
-      <span class="section-rule" aria-hidden="true"></span>
-    </div>
+    <header class="section-head">
+      <p class="eyebrow">selected work</p>
+      <h2 class="section-title text-h2 font-display will-split" id="work-title">
+        Built with intent.
+      </h2>
+      <p class="section-sub text-lead">
+        Six projects. Each one designed to disappear into the task.
+      </p>
+    </header>
 
-    <ol class="work__list" role="list">
-      {projects.map((p) => (
-        <li class="work__item" role="listitem">
-          <article class="project" data-hover>
-            <span class="project__counter" aria-hidden="true"></span>
-            <span class="project__number">{p.number}</span>
-            <div class="project__body">
-              <h3 class="project__name">{p.name}</h3>
-              <p class="project__desc">{p.description}</p>
-              <p class="project__detail">{p.detail}</p>
-              <a
-                class="project__action font-mono text-xs"
-                href={p.repo}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`view ${p.name} repository on github`}
-                data-hover
-              >
-                view repo <span aria-hidden="true">→</span>
-              </a>
-            </div>
+    <div class="work__grid" role="list">
+      {projects.map((p, i) => (
+        <article class="project card" role="listitem" style={`--i:${i}`}>
+          <div class="project__head">
+            <h3 class="project__name text-h3 font-display">{p.name}</h3>
+            <p class="project__tagline">{p.tagline}</p>
+          </div>
+          <p class="project__desc text-body">{p.description}</p>
+          <div class="project__foot">
             <ul class="project__tags" aria-label={`${p.name} stack`}>
               {p.tags.map((tag) => (
                 <li class="tag">{tag}</li>
               ))}
             </ul>
-          </article>
-        </li>
+            <a
+              class="link-arrow project__cta"
+              href={p.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`view ${p.name} repository on github`}
+            >
+              View repo
+              <span class="arrow" aria-hidden="true">›</span>
+            </a>
+          </div>
+        </article>
       ))}
-    </ol>
+    </div>
   </div>
 </section>
 
 <style>
   .work {
-    position: relative;
     padding-block: var(--section-gap);
   }
 
   .section-head {
-    display: grid;
-    gap: clamp(1rem, 2vw, 1.75rem);
-    margin-bottom: clamp(3rem, 6vw, 5rem);
-  }
-
-  .section-eyebrow {
-    color: var(--color-ink-muted);
-    text-transform: lowercase;
-    letter-spacing: 0.25em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
   .section-title {
     color: var(--color-ink);
-    text-transform: lowercase;
-    font-weight: 300;
+    max-width: 18ch;
   }
 
-  .work__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid var(--color-line);
+  .section-sub {
+    color: var(--color-ink-muted);
+    max-width: 42ch;
   }
 
-  .work__item {
-    list-style: none;
+  .work__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(1rem, 1.6vw, 1.5rem);
   }
 
   .project {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-height: 280px;
   }
 
-  .project:first-of-type {
-    border-top: none;
+  .project__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
   }
 
-  .project__counter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 100%;
-    background: var(--color-line);
-    overflow: hidden;
+  .project__name {
+    color: var(--color-ink);
+    text-transform: lowercase;
   }
 
-  .project__counter::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--color-ink);
-    transform-origin: top center;
-    transform: scaleY(0);
-    animation: project-counter-fill linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 55%;
+  .project__tagline {
+    color: var(--color-accent);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: -0.005em;
   }
 
-  @keyframes project-counter-fill {
-    to {
-      transform: scaleY(1);
-    }
+  .project__desc {
+    color: var(--color-ink-muted);
+    flex: 1;
   }
 
-  @media (max-width: 768px) {
-    .project {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      row-gap: 1.25rem;
-    }
-
-    .project__number {
-      grid-column: 1 / span 6;
-      padding-top: 0;
-    }
-
-    .project__body {
-      grid-column: 1 / span 6;
-    }
-
-    .project__tags {
-      grid-column: 1 / span 6;
-      justify-content: flex-start;
-      padding-top: 0;
-    }
+  .project__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .project__counter::after {
-      transform: scaleY(1);
-      animation: none;
-    }
+  .project__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-ink-muted);
+    background: var(--color-surface-2);
+    padding: 0.25rem 0.55rem;
+    border-radius: 6px;
+    letter-spacing: 0;
+  }
+
+  .project__cta {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .project__cta .arrow {
+    font-size: 1.1em;
   }
 </style>
