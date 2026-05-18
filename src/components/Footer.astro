@@ -1,43 +1,26 @@
 ---
 const year: number = new Date().getFullYear()
 ---
-<footer class="footer" id="contact" data-footer role="contentinfo">
+<footer class="footer" data-footer role="contentinfo">
   <div class="wrap footer__inner">
-    <a
-      class="footer-link font-mono text-sm"
-      href="https://github.com/justxxi"
-      target="_blank"
-      rel="noopener noreferrer"
-      data-footer-item
-      data-hover
-    >
-      github
-    </a>
-    <span class="footer__year font-mono text-xs" data-footer-item>© {year}</span>
+    <span class="footer__year font-mono text-xs" data-footer-item>© {year} justxxi</span>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: clamp(8vh, 14vh, 16vh);
+    padding-block: clamp(6vh, 10vh, 12vh);
+    border-top: 1px solid var(--color-line);
   }
 
   .footer__inner {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3rem;
-  }
-
-  .footer-link {
-    color: var(--color-ink-muted);
-    text-transform: lowercase;
-    letter-spacing: 0.25em;
+    justify-content: center;
   }
 
   .footer__year {
     color: var(--color-ink-muted);
     opacity: 0.4;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
   }
 </style>

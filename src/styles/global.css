@@ -295,6 +295,60 @@
     letter-spacing: 0.04em;
   }
 
+  .project__detail {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+    max-width: 520px;
+    margin-top: 0.5rem;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    opacity: 0.75;
+  }
+
+  .project__action {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.12em;
+    position: relative;
+    transition: color 0.4s ease;
+  }
+
+  .project__action::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .project__action:hover,
+  .project__action:focus-visible {
+    color: var(--color-ink);
+  }
+
+  .project__action:hover::after,
+  .project__action:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .project__action span {
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .project__action:hover span,
+  .project__action:focus-visible span {
+    transform: translateX(3px);
+  }
+
   .project__tags {
     grid-column: 9 / span 4;
     display: flex;

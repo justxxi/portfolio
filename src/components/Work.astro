@@ -3,7 +3,9 @@ type Project = {
   number: string
   name: string
   description: string
+  detail: string
   tags: readonly string[]
+  repo: string
 }
 
 const projects: readonly Project[] = [
@@ -11,37 +13,49 @@ const projects: readonly Project[] = [
     number: '01',
     name: 'meridian',
     description: 'autonomous market intelligence agent.',
-    tags: ['python', 'go', 'ai', 'langgraph', 'pgvector']
+    detail: 'ingests 40+ public and private data sources, ranks signals by relevance, and delivers structured briefings. built with langgraph state machines and pgvector for semantic retrieval. processes ~10k documents per run autonomously.',
+    tags: ['python', 'go', 'ai', 'langgraph', 'pgvector'],
+    repo: 'https://github.com/justxxi/meridian'
   },
   {
     number: '02',
     name: 'toxiguard',
     description: 'ai-powered telegram bot for real-time toxicity detection and group moderation.',
-    tags: ['python', 'ai', 'nlp', 'telegram']
+    detail: 'deployed in active communities up to 5k members. classifies messages across six toxicity dimensions with sub-100ms inference. auto-deletes, warns, or escalates based on configurable thresholds.',
+    tags: ['python', 'ai', 'nlp', 'telegram'],
+    repo: 'https://github.com/justxxi/toxiguard'
   },
   {
     number: '03',
     name: 'consul',
     description: 'silent advisor. sovereignty over your data.',
-    tags: ['python', 'privacy', 'local']
+    detail: 'fully local llm assistant with zero external api calls. runs on consumer hardware, stores context in sqlite, and never phones home. designed for users who treat their data as property.',
+    tags: ['python', 'privacy', 'local'],
+    repo: 'https://github.com/justxxi/consul'
   },
   {
     number: '04',
     name: 'phantom',
     description: 'cryptographically secure password and passphrase generator.',
-    tags: ['python', 'cli', 'security', 'cryptography']
+    detail: 'generates diceware-style passphrases and high-entropy passwords using os.urandom. estimates crack time via entropy calculation. no network, no storage, no dependencies beyond standard library.',
+    tags: ['python', 'cli', 'security', 'cryptography'],
+    repo: 'https://github.com/justxxi/phantom'
   },
   {
     number: '05',
     name: 'hush',
     description: 'conceal text within pixels.',
-    tags: ['python', 'steganography', 'cli']
+    detail: 'embeds up to 10kb of plaintext inside a png without visible artifacts. uses lsb substitution with aes-256 encryption and passphrase-derived keys. the payload survives re-compression where possible.',
+    tags: ['python', 'steganography', 'cli'],
+    repo: 'https://github.com/justxxi/hush'
   },
   {
     number: '06',
     name: 'umbra',
     description: 'converts images to ascii symbols.',
-    tags: ['python', 'cli', 'ascii', 'minimalism']
+    detail: 'maps luminance to a curated unicode glyph set with configurable density and aspect ratio correction. handles images up to 4k resolution in under a second. outputs raw text or html with inline styling.',
+    tags: ['python', 'cli', 'ascii', 'minimalism'],
+    repo: 'https://github.com/justxxi/umbra'
   }
 ] as const
 ---
@@ -62,6 +76,16 @@ const projects: readonly Project[] = [
             <div class="project__body">
               <h3 class="project__name">{p.name}</h3>
               <p class="project__desc">{p.description}</p>
+              <p class="project__detail">{p.detail}</p>
+              <a
+                class="project__action font-mono text-xs"
+                href={p.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-hover
+              >
+                view repo <span aria-hidden="true">→</span>
+              </a>
             </div>
             <ul class="project__tags" aria-label={`${p.name} stack`}>
               {p.tags.map((tag) => (
