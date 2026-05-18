@@ -20,6 +20,9 @@ const capabilities: readonly string[] = [
 
     <div class="about__grid">
       <div class="about__col about__col--text">
+        <p class="about-position font-mono text-sm">
+          full-stack developer, 3+ years · open to remote roles and collaborations.
+        </p>
         <p class="about-body font-mono">
           i build tools that are silent by design. most of what i make is invisible —
           that&rsquo;s the point.
@@ -85,6 +88,15 @@ const capabilities: readonly string[] = [
   .about__col--caps {
     grid-column: 8 / span 5;
     padding-top: 0.5rem;
+  }
+
+  .about-position {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    margin-bottom: 0.5rem;
   }
 
   .about-body {

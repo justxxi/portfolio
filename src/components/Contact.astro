@@ -1,0 +1,160 @@
+---
+const year: number = new Date().getFullYear()
+
+type Link = { label: string; href: string }
+
+const links: readonly Link[] = [
+  { label: 'email', href: 'mailto:wyurtrft@proton.me' },
+  { label: 'telegram', href: 'https://t.me/nevercriesonlylaugh' },
+  { label: 'linkedin', href: 'https://www.linkedin.com/in/cryinparis' },
+  { label: 'github', href: 'https://github.com/justxxi' }
+] as const
+---
+<section class="contact" id="contact" data-section aria-labelledby="contact-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="font-mono text-xs section-eyebrow" aria-hidden="true">— contact</p>
+      <h2 class="section-title font-display text-h2 will-split" id="contact-title">contact</h2>
+      <span class="section-rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="contact__grid">
+      <div class="contact__body">
+        <p class="contact__lead font-mono">
+          open to remote roles, collaborations, and interesting problems.
+          if you are building something that requires quiet precision, reach out.
+        </p>
+      </div>
+
+      <ul class="contact__links" role="list">
+        {links.map((link) => (
+          <li class="contact__item" role="listitem">
+            <a
+              class="contact__link font-mono text-sm"
+              href={link.href}
+              target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+              rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+              data-hover
+            >
+              <span class="contact__label">{link.label}</span>
+              <span class="contact__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-block: var(--section-gap);
+  }
+
+  .section-head {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.75rem);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .section-eyebrow {
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.25em;
+    opacity: 0.7;
+  }
+
+  .section-title {
+    color: var(--color-ink);
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+    row-gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .contact__body {
+    grid-column: 1 / span 7;
+  }
+
+  .contact__lead {
+    font-size: var(--text-sm);
+    line-height: 1.8;
+    color: var(--color-ink);
+    max-width: 520px;
+    letter-spacing: 0.03em;
+  }
+
+  .contact__links {
+    grid-column: 8 / span 5;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .contact__item {
+    list-style: none;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .contact__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 0;
+    color: var(--color-ink-muted);
+    text-transform: lowercase;
+    letter-spacing: 0.12em;
+    transition: color 0.4s ease;
+    position: relative;
+  }
+
+  .contact__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--color-ink);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .contact__link:hover,
+  .contact__link:focus-visible {
+    color: var(--color-ink);
+  }
+
+  .contact__link:hover::after,
+  .contact__link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .contact__arrow {
+    opacity: 0.3;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: inline-block;
+  }
+
+  .contact__link:hover .contact__arrow,
+  .contact__link:focus-visible .contact__arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .contact__body,
+    .contact__links {
+      grid-column: 1 / span 12;
+    }
+  }
+</style>
