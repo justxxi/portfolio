@@ -9,12 +9,12 @@ const links: readonly NavLink[] = [
 ---
 <header class="nav" data-nav data-scrolled="false" role="banner">
   <div class="nav__inner wrap">
-    <a class="nav__mark font-mono text-xs" href="#top" data-nav-item aria-label="justxxi, return to top">justxxi</a>
+    <a class="nav__mark font-mono text-xs will-split" href="#top" data-nav-item aria-label="justxxi, return to top">justxxi</a>
     <nav class="nav__links" aria-label="primary">
       {links.map((link, i) => (
         <>
-          <a class="nav-link font-mono text-xs" href={link.href} data-nav-item>{link.label}</a>
-          {i < links.length - 1 ? <span class="nav-sep font-mono text-xs" aria-hidden="true">·</span> : null}
+          <a class="nav-link font-mono text-xs will-split" href={link.href} data-nav-item>{link.label}</a>
+          {i < links.length - 1 ? <span class="nav-sep font-mono text-xs will-split" aria-hidden="true">·</span> : null}
         </>
       ))}
     </nav>

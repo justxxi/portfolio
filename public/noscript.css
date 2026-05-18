@@ -1,8 +1,5 @@
-body {
-  opacity: 1 !important;
-}
-
 .will-split {
+  opacity: 1 !important;
   visibility: visible !important;
 }
 

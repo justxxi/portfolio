@@ -141,14 +141,12 @@ function getIntroRefs(): IntroRefs {
 
 function playIntro(refs: IntroRefs): void {
   if (REDUCED) {
-    gsap.set('body', { opacity: 1 })
     if (refs.line) gsap.set(refs.line, { opacity: 0 })
     if (refs.scrollMark) gsap.set(refs.scrollMark, { height: 18, opacity: 0.25 })
     return
   }
 
   const tl = gsap.timeline({ defaults: { ease: 'expo.aristocrat' } })
-  tl.set('body', { opacity: 1 })
 
   if (refs.line) {
     tl.fromTo(
@@ -158,21 +156,6 @@ function playIntro(refs: IntroRefs): void {
       0
     )
     tl.to(refs.line, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 1.2)
-  }
-
-  if (refs.title) {
-    const split = SplitText.create(refs.title, { type: 'chars', mask: 'chars' })
-    tl.from(
-      split.chars,
-      {
-        yPercent: 110,
-        opacity: 0,
-        stagger: { amount: 0.5, from: 'start' },
-        duration: 1.2,
-        ease: 'expo.aristocrat'
-      },
-      0.5
-    )
   }
 
   if (refs.subtitle) {
@@ -385,14 +368,26 @@ function boot(): void {
       ? document.fonts.ready
       : Promise.resolve()
 
+  const idle = (cb: () => void): void => {
+    const ric = (window as Window & { requestIdleCallback?: (cb: IdleRequestCallback) => number }).requestIdleCallback
+    if (typeof ric === 'function') ric(() => cb())
+    else window.setTimeout(cb, 1)
+  }
+
   Promise.race([fonts, fallback]).then(() => {
     document.body.classList.add('is-ready')
     playIntro(refs)
-    initSectionReveals()
-    initProjectReveals()
-    initAboutReveals()
-    initFooterReveal()
-    ScrollTrigger.refresh()
+    idle(() => {
+      initSectionReveals()
+      idle(() => {
+        initProjectReveals()
+        idle(() => {
+          initAboutReveals()
+          initFooterReveal()
+          ScrollTrigger.refresh()
+        })
+      })
+    })
   })
 }
 

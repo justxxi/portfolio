@@ -45,7 +45,6 @@
   }
 
   body {
-    opacity: 0;
     min-height: 100dvh;
     background: var(--color-ground);
     overflow-x: hidden;
@@ -486,12 +485,14 @@
   }
 
   .will-split {
-    visibility: hidden;
+    opacity: 0;
   }
 
-  .is-ready .will-split {
-    visibility: visible;
+  .is-ready .will-split,
+  .no-js .will-split {
+    opacity: 1;
   }
+
 }
 
 html.lenis,
@@ -545,7 +546,7 @@ button:focus-visible,
     transition-duration: 0.001ms !important;
   }
 
-  body {
+  .will-split {
     opacity: 1 !important;
   }
 
