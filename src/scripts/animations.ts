@@ -308,8 +308,10 @@ function initProjectReveals(): void {
 function initAboutReveals(): void {
   if (REDUCED) return
 
-  const body = document.querySelector<HTMLElement>('.about-body')
-  if (body) {
+  const bodies: HTMLElement[] = Array.from(
+    document.querySelectorAll<HTMLElement>('.about-body')
+  )
+  bodies.forEach((body) => {
     const split = SplitText.create(body, { type: 'lines', mask: 'lines' })
     gsap.from(split.lines, {
       yPercent: 100,
@@ -318,12 +320,12 @@ function initAboutReveals(): void {
       ease: 'expo.aristocrat',
       scrollTrigger: {
         trigger: body,
-        start: 'top 80%',
+        start: 'top 85%',
         toggleActions: 'play none none none',
         once: true
       }
     })
-  }
+  })
 
   const caps: HTMLElement[] = Array.from(
     document.querySelectorAll<HTMLElement>('[data-cap]')

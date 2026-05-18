@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#f9f8f5"/>
+  <g fill="#1a1a1a" font-family="Cormorant, Cormorant Garamond, Georgia, serif">
+    <text x="80" y="320" font-size="180" font-weight="300" letter-spacing="-3">justxxi</text>
+  </g>
+  <g fill="#5a5862" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="22" letter-spacing="3">
+    <text x="84" y="380">python  ·  go  ·  ai systems  ·  privacy tools</text>
+    <text x="84" y="560" opacity="0.6">— full-stack developer · 3+ years</text>
+  </g>
+  <line x1="80" y1="100" x2="1120" y2="100" stroke="#cfccc4" stroke-width="1"/>
+  <line x1="80" y1="530" x2="1120" y2="530" stroke="#cfccc4" stroke-width="1"/>
+  <rect x="1080" y="84" width="32" height="32" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+  <rect x="1092" y="96" width="8" height="8" fill="#1a1a1a"/>
+</svg>

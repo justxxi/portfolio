@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
+  site: 'https://justxxii.localplayer.dev',
   output: 'static',
   compressHTML: true,
   experimental: { rustCompiler: true },

@@ -159,6 +159,27 @@
     opacity: 1;
   }
 
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateY(-200%);
+    background: var(--color-ink);
+    color: var(--color-ground);
+    padding: 0.5rem 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: lowercase;
+    z-index: 200;
+    transition: transform 0.3s ease;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    outline: none;
+  }
+
   .scroll-mark {
     position: relative;
     width: 1px;
@@ -489,6 +510,31 @@ html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: clip;
+}
+
+a:focus-visible,
+button:focus-visible,
+[data-hover]:focus-visible {
+  outline: 1px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .nav-sep {
+    margin: 0 0.5rem;
+  }
+
+  .hero-subtitle {
+    letter-spacing: 0.14em;
+  }
+
+  .project__body {
+    grid-column: 1 / -1;
+  }
+
+  .project__tags {
+    justify-content: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
