@@ -5,8 +5,8 @@
   --color-ground: oklch(98.5% 0.003 85);
   --color-surface: oklch(96% 0.004 85);
   --color-ink: oklch(12% 0.008 265);
-  --color-ink-muted: oklch(45% 0.006 265);
-  --color-line: oklch(88% 0.004 85);
+  --color-ink-muted: oklch(36% 0.006 265);
+  --color-line: oklch(82% 0.004 85);
   --color-accent: oklch(25% 0.01 265);
 
   --font-display: 'Cormorant', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -324,7 +324,6 @@
     margin-top: 0.5rem;
     letter-spacing: 0.04em;
     line-height: 1.7;
-    opacity: 0.75;
   }
 
   .project__action {

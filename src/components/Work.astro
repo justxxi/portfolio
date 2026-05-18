@@ -82,6 +82,7 @@ const projects: readonly Project[] = [
                 href={p.repo}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`view ${p.name} repository on github`}
                 data-hover
               >
                 view repo <span aria-hidden="true">→</span>
@@ -115,7 +116,6 @@ const projects: readonly Project[] = [
     color: var(--color-ink-muted);
     text-transform: lowercase;
     letter-spacing: 0.25em;
-    opacity: 0.7;
   }
 
   .section-title {
