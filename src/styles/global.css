@@ -145,19 +145,6 @@
     transform-origin: left center;
   }
 
-  .reveal-line {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: var(--color-ink);
-    z-index: 90;
-    pointer-events: none;
-    transform: translateY(-50%);
-    opacity: 1;
-  }
-
   .skip-link {
     position: fixed;
     top: 0;
@@ -550,8 +537,14 @@ button:focus-visible,
     opacity: 1 !important;
   }
 
-  .reveal-line,
   .scroll-mark {
     display: none !important;
+  }
+
+  .hero-title,
+  .hero-monogram {
+    animation: none !important;
+    filter: none !important;
+    transform: none !important;
   }
 }

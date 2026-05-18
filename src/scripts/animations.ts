@@ -5,15 +5,6 @@ import Lenis from 'lenis'
 
 gsap.registerPlugin(ScrollTrigger, CustomEase)
 
-type IntroRefs = {
-  line: HTMLElement | null
-  title: HTMLElement | null
-  subtitle: HTMLElement | null
-  scrollLabel: HTMLElement | null
-  scrollMark: HTMLElement | null
-  navItems: NodeListOf<HTMLElement>
-}
-
 const REDUCED: boolean = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 CustomEase.create('expo.aristocrat', 'M0,0 C0.05,0 0.1,0.4 0.3,0.7 0.5,1 0.6,1 1,1')
@@ -127,80 +118,6 @@ function initNavScroll(): void {
   })
 }
 
-function getIntroRefs(): IntroRefs {
-  return {
-    line: document.querySelector<HTMLElement>('.reveal-line'),
-    title: document.querySelector<HTMLElement>('.hero-title'),
-    subtitle: document.querySelector<HTMLElement>('.hero-subtitle'),
-    scrollLabel: document.querySelector<HTMLElement>('.hero-scroll-label'),
-    scrollMark: document.querySelector<HTMLElement>('.scroll-mark'),
-    navItems: document.querySelectorAll<HTMLElement>('[data-nav-item]')
-  }
-}
-
-function playIntro(refs: IntroRefs): void {
-  if (REDUCED) {
-    if (refs.line) gsap.set(refs.line, { opacity: 0 })
-    if (refs.scrollMark) gsap.set(refs.scrollMark, { height: 18, opacity: 0.25 })
-    return
-  }
-
-  const tl = gsap.timeline({ defaults: { ease: 'expo.aristocrat' } })
-
-  if (refs.line) {
-    tl.fromTo(
-      refs.line,
-      { width: 0, left: '50%', opacity: 1 },
-      { width: '100vw', left: 0, duration: 1.0, ease: 'power3.out' },
-      0
-    )
-    tl.to(refs.line, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 1.2)
-  }
-
-  if (refs.subtitle) {
-    tl.from(
-      refs.subtitle,
-      { opacity: 0, y: 12, duration: 0.9, ease: 'expo.aristocrat' },
-      1.0
-    )
-  }
-
-  if (refs.navItems.length > 0) {
-    tl.from(
-      refs.navItems,
-      { opacity: 0, y: 6, stagger: 0.08, duration: 0.6, ease: 'power2.out' },
-      1.3
-    )
-  }
-
-  if (refs.scrollMark) {
-    tl.fromTo(
-      refs.scrollMark,
-      { height: 0, opacity: 0 },
-      { height: 24, opacity: 0.25, duration: 0.8, ease: 'expo.aristocrat' },
-      1.6
-    )
-    tl.add(() => {
-      if (!refs.scrollMark) return
-      gsap.to(refs.scrollMark, {
-        height: 12,
-        opacity: 0.4,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
-      })
-    }, 2.5)
-  }
-
-  if (refs.scrollLabel) {
-    tl.from(
-      refs.scrollLabel,
-      { opacity: 0, duration: 0.7, ease: 'power2.out' },
-      1.8
-    )
-  }
-}
 
 function initSectionReveals(): void {
   if (REDUCED) {
@@ -332,16 +249,7 @@ function boot(): void {
   initLenis()
   initCursor()
   initNavScroll()
-
-  const refs = getIntroRefs()
-
-  const fallback = new Promise<void>((resolve) => {
-    window.setTimeout(resolve, 1500)
-  })
-  const fonts: Promise<unknown> =
-    typeof document.fonts !== 'undefined' && document.fonts.ready
-      ? document.fonts.ready
-      : Promise.resolve()
+  document.body.classList.add('is-ready')
 
   const idle = (cb: () => void): void => {
     const ric = (window as Window & { requestIdleCallback?: (cb: IdleRequestCallback) => number }).requestIdleCallback
@@ -349,18 +257,14 @@ function boot(): void {
     else window.setTimeout(cb, 1)
   }
 
-  Promise.race([fonts, fallback]).then(() => {
-    document.body.classList.add('is-ready')
-    playIntro(refs)
+  idle(() => {
+    initSectionReveals()
     idle(() => {
-      initSectionReveals()
+      initProjectReveals()
       idle(() => {
-        initProjectReveals()
-        idle(() => {
-          initAboutReveals()
-          initFooterReveal()
-          ScrollTrigger.refresh()
-        })
+        initAboutReveals()
+        initFooterReveal()
+        ScrollTrigger.refresh()
       })
     })
   })

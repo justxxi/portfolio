@@ -2,8 +2,9 @@
 ---
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="hero__inner wrap">
+    <span class="hero-monogram font-mono" aria-hidden="true">— j x —</span>
     <h1 class="hero-title font-display text-display" id="hero-title">justxxi</h1>
-    <p class="hero-subtitle font-mono text-sm will-split">
+    <p class="hero-subtitle font-mono text-sm">
       python <span aria-hidden="true">·</span> go <span aria-hidden="true">·</span> ai systems <span aria-hidden="true">·</span> privacy tools
     </p>
   </div>
@@ -28,8 +29,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: clamp(1.5rem, 3vw, 2rem);
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
     text-align: center;
+  }
+
+  .hero-monogram {
+    color: var(--color-ink-muted);
+    letter-spacing: 0.5em;
+    text-transform: lowercase;
+    font-size: 0.7rem;
+    padding-left: 0.5em;
+    animation: hero-rise 1.4s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .hero-title {
@@ -37,14 +47,16 @@
     text-transform: lowercase;
     max-width: 100%;
     font-feature-settings: 'ss01', 'liga', 'dlig', 'swsh';
+    font-weight: 300;
+    animation: hero-focus 2s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .hero-subtitle {
     color: var(--color-ink-muted);
     text-transform: lowercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     font-size: var(--text-sm);
-    opacity: 1;
+    animation: hero-rise 1.4s 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .hero-subtitle span {
@@ -62,12 +74,46 @@
     flex-direction: column;
     align-items: center;
     gap: 0.85rem;
+    animation: hero-rise 1.2s 1.8s ease-out both;
   }
 
   .hero-scroll-label {
     color: var(--color-ink-muted);
-    opacity: 0.4;
+    opacity: 0.55;
     text-transform: lowercase;
     letter-spacing: 0.25em;
+  }
+
+  .scroll-mark {
+    animation: scroll-breathe 2.6s 2.4s ease-in-out infinite;
+  }
+
+  @keyframes hero-focus {
+    0% {
+      filter: blur(18px);
+      transform: scale(1.06);
+      letter-spacing: 0.08em;
+    }
+    100% {
+      filter: blur(0);
+      transform: scale(1);
+      letter-spacing: 0;
+    }
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scroll-breathe {
+    0%, 100% { opacity: 0.25; transform: translateY(0); }
+    50% { opacity: 0.7; transform: translateY(4px); }
   }
 </style>
