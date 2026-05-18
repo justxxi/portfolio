@@ -1,10 +1,9 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SplitText } from 'gsap/SplitText'
 import { CustomEase } from 'gsap/CustomEase'
 import Lenis from 'lenis'
 
-gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase)
+gsap.registerPlugin(ScrollTrigger, CustomEase)
 
 type IntroRefs = {
   line: HTMLElement | null
@@ -216,8 +215,6 @@ function initSectionReveals(): void {
     const title = section.querySelector<HTMLElement>('.section-title')
     if (!rule || !title) return
 
-    const split = SplitText.create(title, { type: 'chars', mask: 'chars' })
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
@@ -232,14 +229,9 @@ function initSectionReveals(): void {
       { scaleX: 1, duration: 0.7, ease: 'expo.aristocrat' }
     )
     tl.from(
-      split.chars,
-      {
-        yPercent: 110,
-        stagger: 0.022,
-        duration: 0.8,
-        ease: 'expo.aristocrat'
-      },
-      '-=0.35'
+      title,
+      { opacity: 0, y: 18, duration: 0.9, ease: 'expo.aristocrat' },
+      '-=0.4'
     )
   })
 }
@@ -248,43 +240,26 @@ function initProjectReveals(): void {
   if (REDUCED) return
 
   gsap.utils.toArray<HTMLElement>('.project').forEach((el) => {
-    const name = el.querySelector<HTMLElement>('.project__name')
-    if (name) {
-      const split = SplitText.create(name, { type: 'lines', mask: 'lines' })
-      gsap.from(split.lines, {
-        yPercent: 100,
-        duration: 0.9,
-        stagger: 0.07,
-        ease: 'expo.aristocrat',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-          once: true
-        }
-      })
-    }
-
-    const meta: HTMLElement[] = Array.from(
+    const targets: HTMLElement[] = Array.from(
       el.querySelectorAll<HTMLElement>(
-        '.project__desc, .project__tags .tag, .project__number'
+        '.project__name, .project__desc, .project__detail, .project__action, .project__tags .tag, .project__number'
       )
     )
-    if (meta.length > 0) {
-      gsap.from(meta, {
-        opacity: 0,
-        y: 8,
-        duration: 0.7,
-        stagger: 0.05,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-          once: true
-        }
-      })
-    }
+    if (targets.length === 0) return
+
+    gsap.from(targets, {
+      opacity: 0,
+      y: 14,
+      duration: 0.8,
+      stagger: 0.05,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+        once: true
+      }
+    })
   })
 }
 
@@ -292,23 +267,23 @@ function initAboutReveals(): void {
   if (REDUCED) return
 
   const bodies: HTMLElement[] = Array.from(
-    document.querySelectorAll<HTMLElement>('.about-body')
+    document.querySelectorAll<HTMLElement>('.about-position, .about-body')
   )
-  bodies.forEach((body) => {
-    const split = SplitText.create(body, { type: 'lines', mask: 'lines' })
-    gsap.from(split.lines, {
-      yPercent: 100,
-      stagger: 0.06,
+  if (bodies.length > 0) {
+    gsap.from(bodies, {
+      opacity: 0,
+      y: 14,
+      stagger: 0.1,
       duration: 0.9,
-      ease: 'expo.aristocrat',
+      ease: 'power3.out',
       scrollTrigger: {
-        trigger: body,
+        trigger: bodies[0] ?? null,
         start: 'top 85%',
         toggleActions: 'play none none none',
         once: true
       }
     })
-  })
+  }
 
   const caps: HTMLElement[] = Array.from(
     document.querySelectorAll<HTMLElement>('[data-cap]')
