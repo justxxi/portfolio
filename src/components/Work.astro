@@ -19,6 +19,7 @@ interface RepoDisplayItem {
   readonly updated_at: string
 }
 
+// Fallback systems
 const fallbackRepos: readonly RepoDisplayItem[] = [
   {
     name: 'ai-orchestrator',
@@ -82,7 +83,7 @@ try {
     <header class="section-head">
       <div class="repo-sync-badge">
         <span class="sync-dot"></span>
-        <span>Live Repositories &bull; Synced with GitHub API</span>
+        <span id="repo-sync-status">Live Repositories &bull; Synced with GitHub API</span>
       </div>
       <h2 class="section-title text-h2 font-display will-split" id="work-title">
         Public Code Repositories<span class="accent-dot">.</span>
@@ -145,6 +146,138 @@ try {
     </div>
   </div>
 </section>
+
+<!-- Client-side Real-time GitHub API Hydration -->
+<script>
+  async function hydrateGitHubRepos() {
+    const container = document.getElementById('repos-container')
+    const syncStatus = document.getElementById('repo-sync-status')
+    if (!container) return
+
+    try {
+      const res = await fetch('https://api.github.com/users/justxxi/repos?sort=updated&per_page=12')
+      if (!res.ok) return
+      const data = await res.json()
+      if (!Array.isArray(data)) return
+
+      const filtered = data.filter((r: any) => !r.fork && r.name.toLowerCase() !== 'portfolio' && r.name.toLowerCase() !== 'justxxi')
+      if (filtered.length === 0) return
+
+      const cardsHtml = filtered.map((r: any) => {
+        const lang = r.language || 'Code'
+        const stars = r.stargazers_count || 0
+        const desc = r.description || 'Open source software project built by justxxi.'
+        const updatedAt = (r.updated_at || '').split('T')[0] || ''
+        const repoUrl = r.html_url
+        const projectJson = JSON.stringify({
+          name: r.name,
+          tagline: `${lang} repository`,
+          description: desc,
+          tags: [lang.toLowerCase(), 'open-source', 'github'],
+          repo: repoUrl,
+          stars: stars,
+          language: lang
+        })
+
+        return `
+          <article class="repo-card card" role="listitem">
+            <div class="repo__top">
+              <div class="repo__meta">
+                <span class="lang-badge">
+                  <span class="lang-dot" data-lang="${lang}"></span>
+                  <span>${lang}</span>
+                </span>
+                <span class="star-badge">
+                  ★ <span>${stars}</span>
+                </span>
+              </div>
+              <a
+                class="repo__link"
+                href="${repoUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View ${r.name} repository on GitHub"
+              >
+                <span>GitHub ↗</span>
+              </a>
+            </div>
+
+            <div class="repo__head">
+              <h3 class="repo__name font-display">${r.name}</h3>
+            </div>
+
+            <p class="repo__desc text-body">${desc}</p>
+
+            <div class="repo__foot">
+              <span class="repo__date font-mono">Updated: ${updatedAt}</span>
+              <button
+                class="repo__details-btn"
+                data-project-json='${projectJson.replace(/'/g, "&apos;")}'
+                aria-label="View modal details for ${r.name}"
+              >
+                <span>Details →</span>
+              </button>
+            </div>
+          </article>
+        `
+      }).join('')
+
+      container.innerHTML = cardsHtml
+      if (syncStatus) syncStatus.textContent = 'Live Repositories • Synced Real-Time with GitHub API'
+
+      // Re-attach modal trigger listeners to newly hydrated DOM elements
+      document.querySelectorAll<HTMLElement>('[data-project-json]').forEach((btn) => {
+        btn.addEventListener('click', (e: Event) => {
+          e.stopPropagation()
+          const jsonStr = btn.getAttribute('data-project-json')
+          if (jsonStr) {
+            try {
+              const modal = document.getElementById('project-modal')
+              const modalBadge = document.getElementById('modal-badge')
+              const modalStars = document.getElementById('modal-stars')
+              const modalLang = document.getElementById('modal-lang')
+              const modalTitle = document.getElementById('modal-title')
+              const modalTagline = document.getElementById('modal-tagline')
+              const modalDesc = document.getElementById('modal-desc')
+              const modalCloneCmd = document.getElementById('modal-clone-cmd')
+              const modalTags = document.getElementById('modal-tags')
+              const modalRepoBtn = document.getElementById('modal-repo-btn') as HTMLAnchorElement | null
+
+              const parsed = JSON.parse(jsonStr)
+              if (modalBadge) modalBadge.textContent = 'PUBLIC GITHUB REPO'
+              if (modalStars) modalStars.textContent = `★ ${parsed.stars ?? 0}`
+              if (modalLang) modalLang.textContent = parsed.language || 'Code'
+              if (modalTitle) modalTitle.textContent = parsed.name || ''
+              if (modalTagline) modalTagline.textContent = parsed.tagline || ''
+              if (modalDesc) modalDesc.textContent = parsed.description || ''
+              if (modalCloneCmd) modalCloneCmd.textContent = `git clone ${parsed.repo}.git`
+              if (modalRepoBtn && parsed.repo) modalRepoBtn.href = parsed.repo
+
+              if (modalTags && Array.isArray(parsed.tags)) {
+                modalTags.innerHTML = parsed.tags.map((t: string) => `<span class="modal-tag-chip font-mono">#${t}</span>`).join('')
+              }
+
+              if (modal) {
+                modal.classList.add('active')
+                modal.setAttribute('aria-hidden', 'false')
+              }
+            } catch (err) {
+              console.error('Failed to parse project json', err)
+            }
+          }
+        })
+      })
+    } catch {
+      // Keep static SSR fallback
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hydrateGitHubRepos)
+  } else {
+    hydrateGitHubRepos()
+  }
+</script>
 
 <style>
   .work {
