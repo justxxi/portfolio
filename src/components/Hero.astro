@@ -30,7 +30,6 @@
       </button>
     </div>
 
-    <!-- Interactive Terminal Snippet -->
     <div class="terminal-window" id="hero-terminal">
       <div class="terminal-header">
         <div class="terminal-dots">
@@ -39,18 +38,18 @@
           <span class="terminal-dot dot-green"></span>
         </div>
         <span class="terminal-title font-mono">bash &bull; justxxi@dev:~</span>
-        <span class="terminal-title font-mono" style="opacity:0.5;">toxiguard.git</span>
+        <span class="terminal-title font-mono" style="opacity:0.5;">github-cli</span>
       </div>
       <div class="terminal-body">
         <div class="terminal-line">
           <span class="terminal-prompt">$</span>
-          <span class="terminal-cmd">git clone https://github.com/justxxi/toxiguard.git</span>
+          <span class="terminal-cmd">gh repo list justxxi --limit 5</span>
         </div>
         <div class="terminal-line terminal-out">
-          <span>Cloning into 'toxiguard'... done.</span>
+          <span>Fetching live repositories from GitHub API...</span>
         </div>
         <div class="terminal-line terminal-out">
-          <span class="terminal-highlight">✓ Real-time NLP inference engine initialized.</span>
+          <span class="terminal-highlight">✓ Repositories synced. Ready for deployment.</span>
         </div>
       </div>
     </div>
@@ -124,7 +123,7 @@
   }
 
   .hero__actions .arrow {
-    transition: transform 0.3s var(--ease-apple);
+    transition: transform 0.3s var(--ease-smooth);
   }
 
   .hero__actions .pill--primary:hover .arrow {

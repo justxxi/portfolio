@@ -1,14 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <rect width="1200" height="630" fill="#f9f8f5"/>
-  <g fill="#1a1a1a" font-family="Cormorant, Cormorant Garamond, Georgia, serif">
-    <text x="80" y="320" font-size="180" font-weight="300" letter-spacing="-3">justxxi</text>
+  <rect width="1200" height="630" fill="#0f0e0d"/>
+  
+  <!-- Subtle border frame -->
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#171614" stroke="#262420" stroke-width="2"/>
+  <circle cx="1060" cy="100" r="10" fill="#c85a3c"/>
+
+  <!-- Brand Title -->
+  <g fill="#f5f0e8" font-family="Inter, -apple-system, sans-serif">
+    <text x="100" y="280" font-size="120" font-weight="700" letter-spacing="-3">justxxi<tspan fill="#c85a3c">.</tspan></text>
   </g>
-  <g fill="#5a5862" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="22" letter-spacing="3">
-    <text x="84" y="380">python  ·  go  ·  ai systems  ·  privacy tools</text>
-    <text x="84" y="560" opacity="0.6">— full-stack developer · 3+ years</text>
+
+  <!-- Tagline -->
+  <g fill="#a8a299" font-family="Inter, -apple-system, sans-serif" font-size="32" font-weight="400">
+    <text x="104" y="360">Full-Stack &amp; AI Engineer • Python • Go • TypeScript • Cloud &amp; DevOps</text>
   </g>
-  <line x1="80" y1="100" x2="1120" y2="100" stroke="#cfccc4" stroke-width="1"/>
-  <line x1="80" y1="530" x2="1120" y2="530" stroke="#cfccc4" stroke-width="1"/>
-  <rect x="1080" y="84" width="32" height="32" fill="none" stroke="#1a1a1a" stroke-width="1"/>
-  <rect x="1092" y="96" width="8" height="8" fill="#1a1a1a"/>
+
+  <!-- Experience Badge -->
+  <g font-family="'JetBrains Mono', monospace" font-size="20" letter-spacing="1">
+    <rect x="104" y="440" width="460" height="48" rx="24" fill="rgba(200, 90, 60, 0.12)" stroke="rgba(200, 90, 60, 0.3)" stroke-width="1"/>
+    <text x="134" y="471" fill="#d96b4d">● Middle Engineer • 3+ Years Experience</text>
+  </g>
 </svg>

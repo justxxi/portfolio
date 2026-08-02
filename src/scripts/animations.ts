@@ -4,9 +4,16 @@ import Lenis from 'lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
+interface ModalProjectData {
+  readonly name?: string
+  readonly tagline?: string
+  readonly description?: string
+  readonly tags?: readonly string[]
+  readonly repo?: string
+}
+
 const REDUCED: boolean = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Smooth Scroll (Lenis)
 function initLenis(): Lenis | null {
   if (REDUCED) return null
   const lenis = new Lenis({
@@ -22,7 +29,6 @@ function initLenis(): Lenis | null {
   return lenis
 }
 
-// Nav bar scroll effect
 function initNavScroll(): void {
   const nav = document.querySelector<HTMLElement>('[data-nav]')
   if (!nav) return
@@ -37,17 +43,16 @@ function initNavScroll(): void {
   })
 }
 
-// Terminal Interactive Click
 function initTerminalCopy(): void {
   const terminal = document.getElementById('hero-terminal')
   const toast = document.getElementById('copy-toast')
   if (!terminal) return
 
   terminal.addEventListener('click', () => {
-    const cmdText = 'git clone https://github.com/justxxi/toxiguard.git'
+    const cmdText = 'gh repo list justxxi --limit 5'
     navigator.clipboard.writeText(cmdText).then(() => {
       if (toast) {
-        toast.innerHTML = '<span style="color: #34d399;">✓</span> <span>Copied git clone command to clipboard!</span>'
+        toast.innerHTML = '<span style="color: #34d399;">✓</span> <span>Copied gh repo list command to clipboard!</span>'
         toast.classList.add('show')
         setTimeout(() => toast.classList.remove('show'), 2800)
       }
@@ -55,7 +60,6 @@ function initTerminalCopy(): void {
   })
 }
 
-// Interactive Project Detail Modal
 function initProjectModal(): void {
   const modal = document.getElementById('project-modal')
   const closeBtn = document.getElementById('modal-close-btn')
@@ -68,7 +72,7 @@ function initProjectModal(): void {
   const modalTags = document.getElementById('modal-tags')
   const modalRepoBtn = document.getElementById('modal-repo-btn') as HTMLAnchorElement | null
 
-  function openModal(data: any): void {
+  function openModal(data: ModalProjectData): void {
     if (modalBadge) modalBadge.textContent = 'GITHUB REPO'
     if (modalTitle) modalTitle.textContent = data.name || ''
     if (modalTagline) modalTagline.textContent = data.tagline || ''
@@ -88,13 +92,13 @@ function initProjectModal(): void {
     modal.setAttribute('aria-hidden', 'true')
   }
 
-  document.querySelectorAll('[data-project-json]').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
+  document.querySelectorAll<HTMLElement>('[data-project-json]').forEach((btn) => {
+    btn.addEventListener('click', (e: Event) => {
       e.stopPropagation()
-      const jsonStr = (btn as HTMLElement).getAttribute('data-project-json')
+      const jsonStr = btn.getAttribute('data-project-json')
       if (jsonStr) {
         try {
-          const data = JSON.parse(jsonStr)
+          const data: ModalProjectData = JSON.parse(jsonStr)
           openModal(data)
         } catch (err) {
           console.error('Failed to parse project json', err)
@@ -104,18 +108,17 @@ function initProjectModal(): void {
   })
 
   closeBtn.addEventListener('click', closeModal)
-  modal.addEventListener('click', (e) => {
+  modal.addEventListener('click', (e: Event) => {
     if (e.target === modal) closeModal()
   })
 
-  window.addEventListener('keydown', (e) => {
+  window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Escape' && modal.classList.contains('active')) {
       closeModal()
     }
   })
 }
 
-// Command Palette (Ctrl + K)
 function initCommandPalette(): void {
   const cmd = document.getElementById('cmd-palette')
   const cmdTriggerBtn = document.getElementById('cmd-trigger-btn')
@@ -136,7 +139,7 @@ function initCommandPalette(): void {
     if (cmdInput) cmdInput.value = ''
   }
 
-  window.addEventListener('keydown', (e) => {
+  window.addEventListener('keydown', (e: KeyboardEvent) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault()
       if (cmd.classList.contains('active')) closeCmd()
@@ -149,13 +152,13 @@ function initCommandPalette(): void {
   cmdTriggerBtn?.addEventListener('click', openCmd)
   heroCmdBtn?.addEventListener('click', openCmd)
 
-  cmd.addEventListener('click', (e) => {
+  cmd.addEventListener('click', (e: Event) => {
     if (e.target === cmd) closeCmd()
   })
 
-  document.querySelectorAll('[data-action]').forEach((item) => {
+  document.querySelectorAll<HTMLElement>('[data-action]').forEach((item) => {
     item.addEventListener('click', () => {
-      const action = (item as HTMLElement).getAttribute('data-action')
+      const action = item.getAttribute('data-action')
       closeCmd()
 
       if (action === 'projects') {
@@ -179,7 +182,6 @@ function initCommandPalette(): void {
   })
 }
 
-// GSAP Reveal Animations
 function initReveals(): void {
   if (REDUCED) return
 

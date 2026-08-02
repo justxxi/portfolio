@@ -50,19 +50,17 @@ const ogImage = `${siteUrl}/og.svg`
     <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="icon" sizes="180x180" href="/touch-icon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
 
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body>
-    <!-- Skip Link -->
     <a class="skip-link" href="#main">Skip to main content</a>
 
     <slot />
 
-    <!-- Project Detail Modal -->
     <div class="modal-overlay" id="project-modal" aria-hidden="true" role="dialog" aria-modal="true">
       <div class="modal-card">
         <button class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
@@ -87,7 +85,6 @@ const ogImage = `${siteUrl}/og.svg`
       </div>
     </div>
 
-    <!-- Command Palette (Ctrl + K) -->
     <div class="cmd-overlay" id="cmd-palette" aria-hidden="true" role="dialog" aria-modal="true">
       <div class="cmd-card">
         <div class="cmd-header">

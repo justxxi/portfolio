@@ -1,14 +1,14 @@
 {
   "name": "justxxi",
   "short_name": "justxxi",
-  "description": "tools that are silent by design. python, go, ai systems, privacy tools.",
+  "description": "justxxi — Middle Full-Stack & AI Engineer. Python, Go, TypeScript, Cloud & DevOps.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f9f8f5",
-  "theme_color": "#f9f8f5",
+  "background_color": "#0f0e0d",
+  "theme_color": "#0f0e0d",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "/apple-touch-icon.svg", "sizes": "180x180", "type": "image/svg+xml", "purpose": "any" }
+    { "src": "/touch-icon.svg", "sizes": "180x180", "type": "image/svg+xml", "purpose": "any" }
   ]
 }

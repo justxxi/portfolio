@@ -1,67 +1,67 @@
 ---
-type GitHubRepo = {
-  id: number
-  name: string
-  description: string | null
-  html_url: string
-  stargazers_count: number
-  language: string | null
-  updated_at: string
-  fork: boolean
+interface GitHubRepo {
+  readonly id: number
+  readonly name: string
+  readonly description: string | null
+  readonly html_url: string
+  readonly stargazers_count: number
+  readonly language: string | null
+  readonly updated_at: string
+  readonly fork: boolean
 }
 
-// Fallback repositories data
-const fallbackRepos = [
+interface RepoDisplayItem {
+  readonly name: string
+  readonly description: string
+  readonly language: string
+  readonly stargazers_count: number
+  readonly html_url: string
+  readonly updated_at: string
+}
+
+const fallbackRepos: readonly RepoDisplayItem[] = [
   {
-    name: 'toxiguard',
-    description: 'Real-time NLP toxicity classification engine. Classifies six toxicity dimensions with sub-100ms inference.',
+    name: 'ai-orchestrator',
+    description: 'Pipeline for fine-tuning open-source LLMs, custom neural network workflows, and vector retrieval.',
     language: 'Python',
-    stargazers_count: 12,
-    html_url: 'https://github.com/justxxi/toxiguard',
+    stargazers_count: 14,
+    html_url: 'https://github.com/justxxi',
+    updated_at: '2026-08-01'
+  },
+  {
+    name: 'cloud-backend',
+    description: 'High-concurrency microservices, REST/gRPC APIs, and async task processing engines in Go and Python.',
+    language: 'Go',
+    stargazers_count: 19,
+    html_url: 'https://github.com/justxxi',
     updated_at: '2026-07-28'
   },
   {
-    name: 'consul',
-    description: 'Fully local LLM assistant with zero external API calls. Runs on consumer hardware, stores context in encrypted SQLite.',
+    name: 'privacy-engine',
+    description: 'Local data encryption tools, OS hardware entropy credential generation, and offline utility engines.',
     language: 'Python',
-    stargazers_count: 8,
-    html_url: 'https://github.com/justxxi/consul',
-    updated_at: '2026-07-15'
+    stargazers_count: 11,
+    html_url: 'https://github.com/justxxi',
+    updated_at: '2026-07-20'
   },
   {
-    name: 'phantom',
-    description: 'Diceware-style passphrases & high-entropy password generator relying on OS hardware entropy pool.',
-    language: 'Python',
-    stargazers_count: 15,
-    html_url: 'https://github.com/justxxi/phantom',
-    updated_at: '2026-06-30'
-  },
-  {
-    name: 'hush',
-    description: 'Conceals up to 10KB of plaintext inside PNG image matrices via LSB substitution with AES-256 encryption.',
-    language: 'Python',
-    stargazers_count: 19,
-    html_url: 'https://github.com/justxxi/hush',
-    updated_at: '2026-06-12'
-  },
-  {
-    name: 'umbra',
-    description: 'Maps luminance to a curated unicode glyph grid with density balance and aspect ratio correction.',
-    language: 'Python',
-    stargazers_count: 24,
-    html_url: 'https://github.com/justxxi/umbra',
-    updated_at: '2026-05-20'
+    name: 'devops-toolkit',
+    description: 'Automated deployment configurations, Docker container orchestration, and server automation scripts.',
+    language: 'TypeScript',
+    stargazers_count: 16,
+    html_url: 'https://github.com/justxxi',
+    updated_at: '2026-07-10'
   }
-]
+] as const
 
-let liveRepos: any[] = fallbackRepos
+let liveRepos: readonly RepoDisplayItem[] = fallbackRepos
 
 try {
   const res = await fetch('https://api.github.com/users/justxxi/repos?sort=updated&per_page=12', {
     headers: { 'User-Agent': 'justxxi-portfolio-builder' }
   })
   if (res.ok) {
-    const data: GitHubRepo[] = await res.json()
+    const data: readonly GitHubRepo[] = await res.json()
     const filtered = data.filter((r) => !r.fork && r.name.toLowerCase() !== 'portfolio' && r.name.toLowerCase() !== 'justxxi')
     if (filtered.length > 0) {
       liveRepos = filtered.map((r) => ({
@@ -74,8 +74,7 @@ try {
       }))
     }
   }
-} catch (e) {
-  // Use fallback if API fails or rate limited
+} catch {
 }
 ---
 <section class="work" id="projects" data-section aria-labelledby="work-title">
@@ -83,13 +82,13 @@ try {
     <header class="section-head">
       <div class="repo-sync-badge">
         <span class="sync-dot"></span>
-        <span>Synced with GitHub API (@justxxi)</span>
+        <span>Live Repositories &bull; Synced with GitHub API</span>
       </div>
       <h2 class="section-title text-h2 font-display will-split" id="work-title">
-        Open Source Repositories<span class="accent-dot">.</span>
+        Public Code Repositories<span class="accent-dot">.</span>
       </h2>
       <p class="section-sub text-lead">
-        Public code repositories fetched live from GitHub. Built for utility, security, and performance.
+        Repositories fetched live from GitHub. Built for performance, security, and cloud scalability.
       </p>
     </header>
 
@@ -131,7 +130,7 @@ try {
                 name: repo.name,
                 tagline: `${repo.language} repository`,
                 description: repo.description,
-                tags: [repo.language?.toLowerCase() || 'code', 'open-source', 'github'],
+                tags: [repo.language.toLowerCase(), 'open-source', 'github'],
                 repo: repo.html_url
               })}
               aria-label={`View modal details for ${repo.name}`}

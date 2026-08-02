@@ -2,7 +2,6 @@
 @import 'lenis/dist/lenis.css';
 
 @theme {
-  /* Real-World Grounded Anti-AI-Slop Palette */
   --color-ground: #0f0e0d;
   --color-surface: #171614;
   --color-surface-2: #1f1d1a;
@@ -35,7 +34,7 @@
 
   --shadow-card: 0 0 0 1px rgba(245, 240, 232, 0.07), 0 8px 24px -6px rgba(0, 0, 0, 0.6);
 
-  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --section-gap: clamp(5.5rem, 11vh, 9rem);
   --page-pad: clamp(1.25rem, 5vw, 3.5rem);
   --max-w: 1200px;
@@ -94,7 +93,6 @@
     max-width: 100%;
   }
 
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--color-ground); }
   ::-webkit-scrollbar-thumb {
@@ -227,7 +225,6 @@
     background: #c85a3c;
   }
 
-  /* Grounded Anti-AI-Slop Card */
   .card {
     background: var(--color-surface);
     border-radius: var(--radius-xl);
@@ -243,7 +240,6 @@
     border-color: var(--color-line-bright);
   }
 
-  /* Live GitHub Meta Badges */
   .star-badge {
     display: inline-flex;
     align-items: center;
@@ -281,7 +277,6 @@
   .lang-dot[data-lang="TypeScript"] { background: #e09f3e; }
   .lang-dot[data-lang="JavaScript"] { background: #d96b4d; }
 
-  /* Terminal Window Component */
   .terminal-window {
     background: #0d0c0a;
     border: 1px solid rgba(245, 240, 232, 0.1);
@@ -344,7 +339,6 @@
   .terminal-out { color: #a8a299; padding-left: 1.2rem; }
   .terminal-highlight { color: #34d399; }
 
-  /* Modal Overlay */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -415,7 +409,6 @@
     margin-bottom: 1.75rem;
   }
 
-  /* Command Palette */
   .cmd-overlay {
     position: fixed;
     top: 0;
@@ -511,7 +504,6 @@
     color: var(--color-ink-muted);
   }
 
-  /* Toast Notification */
   .toast {
     position: fixed;
     bottom: 2rem;
