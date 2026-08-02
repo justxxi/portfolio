@@ -4,13 +4,23 @@ type Link = {
   value: string
   href: string
   hint: string
+  action?: string
 }
 
 const links: readonly Link[] = [
-  { label: 'Email', value: 'wyurtrft@proton.me', href: 'mailto:wyurtrft@proton.me', hint: 'preferred for work inquiries' },
-  { label: 'Telegram', value: '@nevercriesonlylaugh', href: 'https://t.me/nevercriesonlylaugh', hint: 'fastest reply' },
-  { label: 'LinkedIn', value: 'in/cryinparis', href: 'https://www.linkedin.com/in/cryinparis', hint: 'professional network' },
-  { label: 'GitHub', value: 'justxxi', href: 'https://github.com/justxxi', hint: 'open source work' }
+  { 
+    label: 'Email', 
+    value: 'wyurtrft@proton.me', 
+    href: 'mailto:wyurtrft@proton.me', 
+    hint: 'preferred for work inquiries (click to copy)',
+    action: 'copy'
+  },
+  { 
+    label: 'GitHub', 
+    value: 'github.com/justxxi', 
+    href: 'https://github.com/justxxi', 
+    hint: 'open source work & repositories'
+  }
 ] as const
 ---
 <section class="contact" id="contact" data-section aria-labelledby="contact-title">
@@ -18,35 +28,59 @@ const links: readonly Link[] = [
     <header class="section-head">
       <p class="eyebrow">contact</p>
       <h2 class="section-title text-h2 font-display will-split" id="contact-title">
-        Let&rsquo;s build something quiet.
+        Get in touch<span class="accent-dot">.</span>
       </h2>
       <p class="section-sub text-lead">
-        Open to remote roles, collaborations, and problems worth solving.
+        Open to remote engineering roles, backend contracts, and technical collaborations.
       </p>
     </header>
 
-    <ul class="contact__grid" role="list">
+    <div class="contact__grid">
       {links.map((link) => (
-        <li role="listitem">
-          <a
-            class="contact-card card"
-            href={link.href}
-            target={link.href.startsWith('mailto:') ? undefined : '_blank'}
-            rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-            aria-label={`${link.label}: ${link.value}`}
-          >
-            <div class="contact-card__top">
-              <span class="contact-card__label">{link.label}</span>
-              <span class="contact-card__arrow" aria-hidden="true">›</span>
-            </div>
-            <p class="contact-card__value">{link.value}</p>
-            <p class="contact-card__hint">{link.hint}</p>
-          </a>
-        </li>
+        <a
+          class="contact-card card"
+          href={link.href}
+          data-copy={link.action === 'copy' ? link.value : undefined}
+          target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+          rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+          aria-label={`${link.label}: ${link.value}`}
+        >
+          <div class="contact-card__top">
+            <span class="contact-card__label font-mono">{link.label}</span>
+            <span class="contact-card__arrow" aria-hidden="true">→</span>
+          </div>
+          <p class="contact-card__value font-display">{link.value}</p>
+          <p class="contact-card__hint">{link.hint}</p>
+        </a>
       ))}
-    </ul>
+    </div>
   </div>
 </section>
+
+<!-- Toast Notification -->
+<div class="toast" id="copy-toast" role="status" aria-live="polite">
+  <span style="color: var(--color-accent);">●</span>
+  <span>Email copied to clipboard!</span>
+</div>
+
+<script>
+  const copyCard = document.querySelector('[data-copy]')
+  const toast = document.getElementById('copy-toast')
+
+  if (copyCard && toast) {
+    copyCard.addEventListener('click', (e) => {
+      const email = copyCard.getAttribute('data-copy')
+      if (email) {
+        navigator.clipboard.writeText(email).then(() => {
+          toast.classList.add('show')
+          setTimeout(() => {
+            toast.classList.remove('show')
+          }, 2800)
+        })
+      }
+    })
+  }
+</script>
 
 <style>
   .contact {
@@ -59,33 +93,38 @@ const links: readonly Link[] = [
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
   }
 
   .section-title {
     color: var(--color-ink);
-    max-width: 18ch;
+    max-width: 22ch;
+  }
+
+  .accent-dot {
+    color: var(--color-accent);
   }
 
   .section-sub {
     color: var(--color-ink-muted);
-    max-width: 42ch;
+    max-width: 44ch;
   }
 
   .contact__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: clamp(1rem, 1.6vw, 1.5rem);
-    list-style: none;
-    padding: 0;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(1.2rem, 2vw, 2rem);
+    max-width: 880px;
+    margin-inline: auto;
   }
 
   .contact-card {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     cursor: pointer;
     color: var(--color-ink);
+    text-decoration: none;
   }
 
   .contact-card__top {
@@ -99,30 +138,29 @@ const links: readonly Link[] = [
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--color-ink-muted);
-  }
-
-  .contact-card__arrow {
-    color: var(--color-ink-muted);
-    font-size: 1.2rem;
-    transition: transform 0.4s var(--ease-apple), color 0.3s var(--ease-apple);
-  }
-
-  .contact-card:hover .contact-card__arrow {
-    transform: translateX(3px);
     color: var(--color-accent);
   }
 
+  .contact-card__arrow {
+    color: var(--color-accent);
+    font-size: 1.1rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .contact-card:hover .contact-card__arrow {
+    transform: translateX(4px);
+    color: var(--color-accent-hover);
+  }
+
   .contact-card__value {
-    font-size: var(--text-lead);
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
     color: var(--color-ink);
   }
 
   .contact-card__hint {
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
-    margin-top: 0.25rem;
   }
 </style>

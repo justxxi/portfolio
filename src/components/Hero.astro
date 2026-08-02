@@ -1,21 +1,58 @@
 ---
 ---
 <section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero__glow" aria-hidden="true"></div>
+
   <div class="hero__inner">
-    <p class="hero__eyebrow">full-stack developer</p>
-    <h1 class="hero__title text-display font-display" id="hero-title">justxxi.</h1>
+    <div class="badge-status">
+      <span class="badge-status__dot"></span>
+      <span>Middle Full-Stack &amp; AI Engineer &bull; 3+ years experience</span>
+    </div>
+
+    <h1 class="hero__title font-display" id="hero-title">
+      Full-Stack &amp; AI Engineer<span class="accent-dot">.</span>
+    </h1>
+
     <p class="hero__lead text-lead">
-      Tools that are silent by design.<br />
-      Python, Go, AI systems, and privacy.
+      Hey, I&rsquo;m <strong class="text-white">justxxi</strong>. Full-stack developer with 3+ years of experience. I build web applications, cloud backends, and fine-tune custom AI models using <strong class="text-white">Python</strong>, <strong class="text-white">Go</strong>, and <strong class="text-white">TypeScript</strong>.
     </p>
+
     <div class="hero__actions">
-      <a class="pill pill--primary" href="#work">
-        View work
-        <span class="arrow" aria-hidden="true">›</span>
+      <a class="pill pill--primary" href="#projects">
+        <span>View repositories</span>
+        <span class="arrow" aria-hidden="true">→</span>
       </a>
       <a class="pill pill--ghost" href="#contact">
         Get in touch
       </a>
+      <button class="pill pill--ghost" id="hero-cmd-btn" aria-label="Open command palette">
+        <span class="font-mono">⌘K Search</span>
+      </button>
+    </div>
+
+    <!-- Interactive Terminal Snippet -->
+    <div class="terminal-window" id="hero-terminal">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="terminal-dot dot-red"></span>
+          <span class="terminal-dot dot-yellow"></span>
+          <span class="terminal-dot dot-green"></span>
+        </div>
+        <span class="terminal-title font-mono">bash &bull; justxxi@dev:~</span>
+        <span class="terminal-title font-mono" style="opacity:0.5;">toxiguard.git</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-cmd">git clone https://github.com/justxxi/toxiguard.git</span>
+        </div>
+        <div class="terminal-line terminal-out">
+          <span>Cloning into 'toxiguard'... done.</span>
+        </div>
+        <div class="terminal-line terminal-out">
+          <span class="terminal-highlight">✓ Real-time NLP inference engine initialized.</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -26,87 +63,75 @@
     min-height: 92dvh;
     display: grid;
     place-items: center;
-    padding: clamp(7rem, 14vh, 9rem) var(--page-pad) clamp(4rem, 8vh, 6rem);
+    padding: clamp(7.5rem, 15vh, 9.5rem) var(--page-pad) clamp(4rem, 8vh, 6rem);
     text-align: center;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 102, 204, 0.04), transparent 60%),
-      var(--color-ground);
+    background: var(--color-ground);
+    overflow: hidden;
+  }
+
+  .hero__glow {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200, 90, 60, 0.12) 0%, rgba(200, 90, 60, 0.02) 60%, transparent 80%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .hero__inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(1rem, 2vw, 1.5rem);
-    max-width: 920px;
-  }
-
-  .hero__eyebrow {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-accent);
-    letter-spacing: -0.005em;
-    animation: hero-rise 1s 0.8s var(--ease-apple) both;
+    gap: clamp(1.2rem, 2.5vw, 1.75rem);
+    max-width: 860px;
   }
 
   .hero__title {
+    font-size: clamp(2.8rem, 6.5vw, 5rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
     color: var(--color-ink);
     margin: 0;
-    animation: hero-focus 1.4s var(--ease-apple) both;
+    font-weight: 700;
+  }
+
+  .text-white { color: #ffffff; }
+
+  .accent-dot {
+    color: var(--color-accent);
   }
 
   .hero__lead {
     color: var(--color-ink-muted);
-    max-width: 36ch;
-    margin-top: 0.5rem;
-    animation: hero-rise 1.1s 1.1s var(--ease-apple) both;
+    max-width: 50ch;
+    margin-top: 0.25rem;
+    font-size: var(--text-lead);
+    line-height: 1.6;
   }
 
   .hero__actions {
     display: flex;
-    gap: 0.75rem;
-    margin-top: clamp(1.25rem, 2.5vw, 2rem);
+    gap: 0.85rem;
+    margin-top: clamp(0.75rem, 2vw, 1.25rem);
     flex-wrap: wrap;
     justify-content: center;
-    animation: hero-rise 1.1s 1.4s var(--ease-apple) both;
   }
 
   .hero__actions .arrow {
-    font-size: 1.1em;
-    transform: translateY(-1px);
     transition: transform 0.3s var(--ease-apple);
   }
 
   .hero__actions .pill--primary:hover .arrow {
-    transform: translate(2px, -1px);
+    transform: translateX(4px);
   }
 
-  @keyframes hero-focus {
-    0% {
-      filter: blur(14px);
-      transform: scale(1.04);
-      letter-spacing: -0.01em;
-    }
-    100% {
-      filter: blur(0);
-      transform: scale(1);
-      letter-spacing: -0.035em;
-    }
-  }
-
-  @keyframes hero-rise {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__title,
-    .hero__lead,
-    .hero__eyebrow,
-    .hero__actions {
-      animation: none !important;
-      filter: none !important;
-      transform: none !important;
-    }
+  #hero-terminal {
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
   }
 </style>

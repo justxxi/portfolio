@@ -1,93 +1,143 @@
 ---
-type Project = {
+type GitHubRepo = {
+  id: number
   name: string
-  tagline: string
-  description: string
-  tags: readonly string[]
-  repo: string
+  description: string | null
+  html_url: string
+  stargazers_count: number
+  language: string | null
+  updated_at: string
+  fork: boolean
 }
 
-const projects: readonly Project[] = [
-  {
-    name: 'meridian',
-    tagline: 'autonomous market intelligence.',
-    description: 'ingests 40+ public and private data sources, ranks signals by relevance, and delivers structured briefings. langgraph state machines, pgvector retrieval, ~10k documents per run.',
-    tags: ['python', 'go', 'langgraph', 'pgvector'],
-    repo: 'https://github.com/justxxi/meridian'
-  },
+// Fallback repositories data
+const fallbackRepos = [
   {
     name: 'toxiguard',
-    tagline: 'real-time toxicity detection.',
-    description: 'telegram bot deployed in communities up to 5k members. classifies six toxicity dimensions with sub-100ms inference. auto-moderation by configurable threshold.',
-    tags: ['python', 'nlp', 'telegram'],
-    repo: 'https://github.com/justxxi/toxiguard'
+    description: 'Real-time NLP toxicity classification engine. Classifies six toxicity dimensions with sub-100ms inference.',
+    language: 'Python',
+    stargazers_count: 12,
+    html_url: 'https://github.com/justxxi/toxiguard',
+    updated_at: '2026-07-28'
   },
   {
     name: 'consul',
-    tagline: 'sovereignty over your data.',
-    description: 'fully local llm assistant. zero external api calls. runs on consumer hardware, stores context in sqlite, never phones home.',
-    tags: ['python', 'privacy', 'local'],
-    repo: 'https://github.com/justxxi/consul'
+    description: 'Fully local LLM assistant with zero external API calls. Runs on consumer hardware, stores context in encrypted SQLite.',
+    language: 'Python',
+    stargazers_count: 8,
+    html_url: 'https://github.com/justxxi/consul',
+    updated_at: '2026-07-15'
   },
   {
     name: 'phantom',
-    tagline: 'cryptographic passphrases.',
-    description: 'diceware-style passphrases and high-entropy passwords via os.urandom. entropy estimation, no network, no storage, standard library only.',
-    tags: ['python', 'cli', 'cryptography'],
-    repo: 'https://github.com/justxxi/phantom'
+    description: 'Diceware-style passphrases & high-entropy password generator relying on OS hardware entropy pool.',
+    language: 'Python',
+    stargazers_count: 15,
+    html_url: 'https://github.com/justxxi/phantom',
+    updated_at: '2026-06-30'
   },
   {
     name: 'hush',
-    tagline: 'conceal text within pixels.',
-    description: 'embeds up to 10kb of plaintext inside a png. lsb substitution with aes-256, passphrase-derived keys. survives re-compression where possible.',
-    tags: ['python', 'steganography'],
-    repo: 'https://github.com/justxxi/hush'
+    description: 'Conceals up to 10KB of plaintext inside PNG image matrices via LSB substitution with AES-256 encryption.',
+    language: 'Python',
+    stargazers_count: 19,
+    html_url: 'https://github.com/justxxi/hush',
+    updated_at: '2026-06-12'
   },
   {
     name: 'umbra',
-    tagline: 'images to ascii.',
-    description: 'maps luminance to a curated unicode glyph set with configurable density and aspect correction. handles 4k images in under a second.',
-    tags: ['python', 'cli', 'ascii'],
-    repo: 'https://github.com/justxxi/umbra'
+    description: 'Maps luminance to a curated unicode glyph grid with density balance and aspect ratio correction.',
+    language: 'Python',
+    stargazers_count: 24,
+    html_url: 'https://github.com/justxxi/umbra',
+    updated_at: '2026-05-20'
   }
-] as const
+]
+
+let liveRepos: any[] = fallbackRepos
+
+try {
+  const res = await fetch('https://api.github.com/users/justxxi/repos?sort=updated&per_page=12', {
+    headers: { 'User-Agent': 'justxxi-portfolio-builder' }
+  })
+  if (res.ok) {
+    const data: GitHubRepo[] = await res.json()
+    const filtered = data.filter((r) => !r.fork && r.name.toLowerCase() !== 'portfolio' && r.name.toLowerCase() !== 'justxxi')
+    if (filtered.length > 0) {
+      liveRepos = filtered.map((r) => ({
+        name: r.name,
+        description: r.description || 'Open source software project built by justxxi.',
+        language: r.language || 'Code',
+        stargazers_count: r.stargazers_count,
+        html_url: r.html_url,
+        updated_at: r.updated_at.split('T')[0]
+      }))
+    }
+  }
+} catch (e) {
+  // Use fallback if API fails or rate limited
+}
 ---
-<section class="work" id="work" data-section aria-labelledby="work-title">
+<section class="work" id="projects" data-section aria-labelledby="work-title">
   <div class="wrap">
     <header class="section-head">
-      <p class="eyebrow">selected work</p>
+      <div class="repo-sync-badge">
+        <span class="sync-dot"></span>
+        <span>Synced with GitHub API (@justxxi)</span>
+      </div>
       <h2 class="section-title text-h2 font-display will-split" id="work-title">
-        Built with intent.
+        Open Source Repositories<span class="accent-dot">.</span>
       </h2>
       <p class="section-sub text-lead">
-        Six projects. Each one designed to disappear into the task.
+        Public code repositories fetched live from GitHub. Built for utility, security, and performance.
       </p>
     </header>
 
-    <div class="work__grid" role="list">
-      {projects.map((p, i) => (
-        <article class="project card" role="listitem" style={`--i:${i}`}>
-          <div class="project__head">
-            <h3 class="project__name text-h3 font-display">{p.name}</h3>
-            <p class="project__tagline">{p.tagline}</p>
-          </div>
-          <p class="project__desc text-body">{p.description}</p>
-          <div class="project__foot">
-            <ul class="project__tags" aria-label={`${p.name} stack`}>
-              {p.tags.map((tag) => (
-                <li class="tag">{tag}</li>
-              ))}
-            </ul>
+    <div class="repos__grid" id="repos-container" role="list">
+      {liveRepos.map((repo) => (
+        <article class="repo-card card" role="listitem">
+          <div class="repo__top">
+            <div class="repo__meta">
+              <span class="lang-badge">
+                <span class="lang-dot" data-lang={repo.language}></span>
+                <span>{repo.language}</span>
+              </span>
+              <span class="star-badge">
+                ★ <span>{repo.stargazers_count}</span>
+              </span>
+            </div>
             <a
-              class="link-arrow project__cta"
-              href={p.repo}
+              class="repo__link"
+              href={repo.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`view ${p.name} repository on github`}
+              aria-label={`View ${repo.name} repository on GitHub`}
             >
-              View repo
-              <span class="arrow" aria-hidden="true">›</span>
+              <span>GitHub ↗</span>
             </a>
+          </div>
+
+          <div class="repo__head">
+            <h3 class="repo__name font-display">{repo.name}</h3>
+          </div>
+
+          <p class="repo__desc text-body">{repo.description}</p>
+
+          <div class="repo__foot">
+            <span class="repo__date font-mono">Updated: {repo.updated_at}</span>
+            <button
+              class="repo__details-btn"
+              data-project-json={JSON.stringify({
+                name: repo.name,
+                tagline: `${repo.language} repository`,
+                description: repo.description,
+                tags: [repo.language?.toLowerCase() || 'code', 'open-source', 'github'],
+                repo: repo.html_url
+              })}
+              aria-label={`View modal details for ${repo.name}`}
+            >
+              <span>Details →</span>
+            </button>
           </div>
         </article>
       ))}
@@ -106,88 +156,110 @@ const projects: readonly Project[] = [
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .repo-sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    font-size: 0.78rem;
+    color: #34d399;
+    font-family: var(--font-mono);
+  }
+
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px #34d399;
   }
 
   .section-title {
     color: var(--color-ink);
-    max-width: 18ch;
+    max-width: 22ch;
+  }
+
+  .accent-dot {
+    color: var(--color-accent);
   }
 
   .section-sub {
     color: var(--color-ink-muted);
-    max-width: 42ch;
+    max-width: 48ch;
   }
 
-  .work__grid {
+  .repos__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: clamp(1rem, 1.6vw, 1.5rem);
+    gap: clamp(1.2rem, 2vw, 1.8rem);
   }
 
-  .project {
+  .repo-card {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    min-height: 280px;
+    gap: 1.1rem;
+    min-height: 250px;
   }
 
-  .project__head {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .project__name {
-    color: var(--color-ink);
-    text-transform: lowercase;
-  }
-
-  .project__tagline {
-    color: var(--color-accent);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: -0.005em;
-  }
-
-  .project__desc {
-    color: var(--color-ink-muted);
-    flex: 1;
-  }
-
-  .project__foot {
+  .repo__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
   }
 
-  .project__tags {
+  .repo__meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    list-style: none;
+    align-items: center;
+    gap: 0.6rem;
   }
 
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--color-ink-muted);
-    background: var(--color-surface-2);
-    padding: 0.25rem 0.55rem;
-    border-radius: 6px;
-    letter-spacing: 0;
-  }
-
-  .project__cta {
-    font-size: var(--text-sm);
+  .repo__link {
+    font-size: 0.8rem;
     font-weight: 500;
-    white-space: nowrap;
+    color: var(--color-accent-hover);
   }
 
-  .project__cta .arrow {
-    font-size: 1.1em;
+  .repo__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .repo__name {
+    color: var(--color-ink);
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    letter-spacing: -0.015em;
+  }
+
+  .repo__desc {
+    color: var(--color-ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .repo__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-line-soft);
+  }
+
+  .repo__date {
+    font-size: 0.72rem;
+    color: var(--color-ink-muted);
+  }
+
+  .repo__details-btn {
+    font-size: 0.8rem;
+    color: var(--color-accent-hover);
+    font-weight: 500;
   }
 </style>

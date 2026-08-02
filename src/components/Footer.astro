@@ -3,18 +3,18 @@ const year: number = new Date().getFullYear()
 ---
 <footer class="footer" role="contentinfo">
   <div class="wrap footer__inner">
-    <p class="footer__copy">Copyright &copy; {year} justxxi. All rights reserved.</p>
+    <p class="footer__copy">&copy; {year} justxxi. All rights reserved.</p>
     <nav class="footer__links" aria-label="footer">
       <a class="footer__link" href="https://github.com/justxxi/portfolio" target="_blank" rel="noopener noreferrer">Source</a>
       <span class="footer__sep" aria-hidden="true">|</span>
-      <a class="footer__link" href="#top">Back to top</a>
+      <a class="footer__link" href="#top">Back to top ↑</a>
     </nav>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: clamp(1.5rem, 3vh, 2.5rem);
+    padding-block: clamp(1.75rem, 3.5vh, 2.75rem);
     background: var(--color-surface-2);
     border-top: 1px solid var(--color-line-soft);
   }
@@ -28,31 +28,30 @@ const year: number = new Date().getFullYear()
   }
 
   .footer__copy {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--color-ink-muted);
-    letter-spacing: -0.005em;
   }
 
   .footer__links {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .footer__link {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--color-ink-muted);
-    transition: color 0.3s var(--ease-apple);
+    transition: color 0.2s ease;
   }
 
   .footer__link:hover,
   .footer__link:focus-visible {
-    color: var(--color-accent);
+    color: var(--color-accent-hover);
   }
 
   .footer__sep {
     color: var(--color-line);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 
   @media (max-width: 540px) {

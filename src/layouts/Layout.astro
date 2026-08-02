@@ -9,7 +9,7 @@ type Props = {
 
 const {
   title = 'justxxi — full-stack developer',
-  description = 'tools that are silent by design. python, go, ai systems, privacy tools.',
+  description = 'Full-stack developer building backends, CLI tools, and AI systems in Python, Go, and TypeScript.',
   path = Astro.url.pathname
 }: Props = Astro.props
 
@@ -22,11 +22,15 @@ const ogImage = `${siteUrl}/og.svg`
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#fbfbfd" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f0e0d" />
     <meta name="description" content={description} />
     <meta name="author" content="justxxi" />
     <meta name="robots" content="index, follow" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <link rel="canonical" href={canonical} />
 
@@ -53,8 +57,74 @@ const ogImage = `${siteUrl}/og.svg`
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <!-- Skip Link -->
+    <a class="skip-link" href="#main">Skip to main content</a>
+
     <slot />
+
+    <!-- Project Detail Modal -->
+    <div class="modal-overlay" id="project-modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <button class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <span class="modal-badge font-mono" id="modal-badge">FEATURED</span>
+          <div>
+            <h3 class="modal-title font-display" id="modal-title">Project Name</h3>
+            <p class="modal-tagline" id="modal-tagline">Project Tagline</p>
+          </div>
+        </div>
+        <p class="modal-desc text-body" id="modal-desc">Project Description</p>
+        <div class="modal-section">
+          <h4 class="modal-subhead font-mono">TECHNOLOGY STACK</h4>
+          <div class="modal-tags" id="modal-tags"></div>
+        </div>
+        <div class="modal-footer">
+          <a class="pill pill--primary" id="modal-repo-btn" href="#" target="_blank" rel="noopener noreferrer">
+            <span>View GitHub Repository</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Command Palette (Ctrl + K) -->
+    <div class="cmd-overlay" id="cmd-palette" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <span class="cmd-icon">🔍</span>
+          <input type="text" id="cmd-input" placeholder="Type a command or search..." autocomplete="off" />
+          <span class="cmd-badge font-mono">ESC</span>
+        </div>
+        <div class="cmd-list" id="cmd-list">
+          <button class="cmd-item" data-action="projects">
+            <span class="cmd-item-icon">⚡</span>
+            <span class="cmd-item-text">View Featured Projects</span>
+            <span class="cmd-item-shortcut font-mono">#projects</span>
+          </button>
+          <button class="cmd-item" data-action="about">
+            <span class="cmd-item-icon">👨‍💻</span>
+            <span class="cmd-item-text">View About & Tech Stack</span>
+            <span class="cmd-item-shortcut font-mono">#about</span>
+          </button>
+          <button class="cmd-item" data-action="contact">
+            <span class="cmd-item-icon">✉</span>
+            <span class="cmd-item-text">Get in Touch</span>
+            <span class="cmd-item-shortcut font-mono">#contact</span>
+          </button>
+          <button class="cmd-item" data-action="copy-email">
+            <span class="cmd-item-icon">📋</span>
+            <span class="cmd-item-text">Copy Email (wyurtrft@proton.me)</span>
+            <span class="cmd-item-shortcut font-mono">COPY</span>
+          </button>
+          <button class="cmd-item" data-action="github">
+            <span class="cmd-item-icon">↗</span>
+            <span class="cmd-item-text">Open GitHub Profile (github.com/justxxi)</span>
+            <span class="cmd-item-shortcut font-mono">LINK</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       import '../scripts/animations'
     </script>

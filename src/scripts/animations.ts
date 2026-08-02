@@ -6,11 +6,12 @@ gsap.registerPlugin(ScrollTrigger)
 
 const REDUCED: boolean = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+// Smooth Scroll (Lenis)
 function initLenis(): Lenis | null {
   if (REDUCED) return null
   const lenis = new Lenis({
     autoRaf: false,
-    lerp: 0.085,
+    lerp: 0.08,
     allowNestedScroll: true
   })
   lenis.on('scroll', ScrollTrigger.update)
@@ -21,65 +22,172 @@ function initLenis(): Lenis | null {
   return lenis
 }
 
+// Nav bar scroll effect
 function initNavScroll(): void {
   const nav = document.querySelector<HTMLElement>('[data-nav]')
   if (!nav) return
   const update = (): void => {
-    nav.dataset.scrolled = window.scrollY > 8 ? 'true' : 'false'
+    nav.dataset.scrolled = window.scrollY > 12 ? 'true' : 'false'
   }
   update()
   ScrollTrigger.create({
-    start: 'top -8',
+    start: 'top -12',
     end: 99999,
     onUpdate: update
   })
 }
 
-function initSectionReveals(): void {
-  if (REDUCED) return
-  gsap.utils.toArray<HTMLElement>('[data-section]').forEach((section) => {
-    const title = section.querySelector<HTMLElement>('.section-title')
-    const sub = section.querySelector<HTMLElement>('.section-sub')
-    if (title) {
-      gsap.from(title, {
-        opacity: 0,
-        y: 24,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 78%',
-          toggleActions: 'play none none none',
-          once: true
-        }
-      })
+// Terminal Interactive Click
+function initTerminalCopy(): void {
+  const terminal = document.getElementById('hero-terminal')
+  const toast = document.getElementById('copy-toast')
+  if (!terminal) return
+
+  terminal.addEventListener('click', () => {
+    const cmdText = 'git clone https://github.com/justxxi/toxiguard.git'
+    navigator.clipboard.writeText(cmdText).then(() => {
+      if (toast) {
+        toast.innerHTML = '<span style="color: #34d399;">✓</span> <span>Copied git clone command to clipboard!</span>'
+        toast.classList.add('show')
+        setTimeout(() => toast.classList.remove('show'), 2800)
+      }
+    })
+  })
+}
+
+// Interactive Project Detail Modal
+function initProjectModal(): void {
+  const modal = document.getElementById('project-modal')
+  const closeBtn = document.getElementById('modal-close-btn')
+  if (!modal || !closeBtn) return
+
+  const modalBadge = document.getElementById('modal-badge')
+  const modalTitle = document.getElementById('modal-title')
+  const modalTagline = document.getElementById('modal-tagline')
+  const modalDesc = document.getElementById('modal-desc')
+  const modalTags = document.getElementById('modal-tags')
+  const modalRepoBtn = document.getElementById('modal-repo-btn') as HTMLAnchorElement | null
+
+  function openModal(data: any): void {
+    if (modalBadge) modalBadge.textContent = 'GITHUB REPO'
+    if (modalTitle) modalTitle.textContent = data.name || ''
+    if (modalTagline) modalTagline.textContent = data.tagline || ''
+    if (modalDesc) modalDesc.textContent = data.description || ''
+    if (modalRepoBtn && data.repo) modalRepoBtn.href = data.repo
+
+    if (modalTags && Array.isArray(data.tags)) {
+      modalTags.innerHTML = data.tags.map((t: string) => `<span class="modal-tag-chip font-mono">#${t}</span>`).join('')
     }
-    if (sub) {
-      gsap.from(sub, {
-        opacity: 0,
-        y: 16,
-        duration: 0.9,
-        delay: 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 78%',
-          toggleActions: 'play none none none',
-          once: true
+
+    modal.classList.add('active')
+    modal.setAttribute('aria-hidden', 'false')
+  }
+
+  function closeModal(): void {
+    modal.classList.remove('active')
+    modal.setAttribute('aria-hidden', 'true')
+  }
+
+  document.querySelectorAll('[data-project-json]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const jsonStr = (btn as HTMLElement).getAttribute('data-project-json')
+      if (jsonStr) {
+        try {
+          const data = JSON.parse(jsonStr)
+          openModal(data)
+        } catch (err) {
+          console.error('Failed to parse project json', err)
         }
-      })
+      }
+    })
+  })
+
+  closeBtn.addEventListener('click', closeModal)
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal()
+  })
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal()
     }
   })
 }
 
-function initCardReveals(): void {
+// Command Palette (Ctrl + K)
+function initCommandPalette(): void {
+  const cmd = document.getElementById('cmd-palette')
+  const cmdTriggerBtn = document.getElementById('cmd-trigger-btn')
+  const heroCmdBtn = document.getElementById('hero-cmd-btn')
+  const cmdInput = document.getElementById('cmd-input') as HTMLInputElement | null
+  const toast = document.getElementById('copy-toast')
+  if (!cmd) return
+
+  function openCmd(): void {
+    cmd?.classList.add('active')
+    cmd?.setAttribute('aria-hidden', 'false')
+    setTimeout(() => cmdInput?.focus(), 50)
+  }
+
+  function closeCmd(): void {
+    cmd?.classList.remove('active')
+    cmd?.setAttribute('aria-hidden', 'true')
+    if (cmdInput) cmdInput.value = ''
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault()
+      if (cmd.classList.contains('active')) closeCmd()
+      else openCmd()
+    } else if (e.key === 'Escape' && cmd.classList.contains('active')) {
+      closeCmd()
+    }
+  })
+
+  cmdTriggerBtn?.addEventListener('click', openCmd)
+  heroCmdBtn?.addEventListener('click', openCmd)
+
+  cmd.addEventListener('click', (e) => {
+    if (e.target === cmd) closeCmd()
+  })
+
+  document.querySelectorAll('[data-action]').forEach((item) => {
+    item.addEventListener('click', () => {
+      const action = (item as HTMLElement).getAttribute('data-action')
+      closeCmd()
+
+      if (action === 'projects') {
+        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (action === 'about') {
+        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (action === 'contact') {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+      } else if (action === 'copy-email') {
+        navigator.clipboard.writeText('wyurtrft@proton.me').then(() => {
+          if (toast) {
+            toast.innerHTML = '<span style="color: var(--color-accent);">●</span> <span>Email copied to clipboard!</span>'
+            toast.classList.add('show')
+            setTimeout(() => toast.classList.remove('show'), 2800)
+          }
+        })
+      } else if (action === 'github') {
+        window.open('https://github.com/justxxi', '_blank')
+      }
+    })
+  })
+}
+
+// GSAP Reveal Animations
+function initReveals(): void {
   if (REDUCED) return
-  const cards = gsap.utils.toArray<HTMLElement>('.project, .contact-card, .about__caps')
-  cards.forEach((card) => {
+
+  gsap.utils.toArray<HTMLElement>('.card').forEach((card) => {
     gsap.from(card, {
       opacity: 0,
-      y: 28,
-      duration: 0.9,
+      y: 20,
+      duration: 0.7,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: card,
@@ -91,28 +199,12 @@ function initCardReveals(): void {
   })
 }
 
-function initAboutReveals(): void {
-  if (REDUCED) return
-  const bodies = gsap.utils.toArray<HTMLElement>('.about-body, .about-meta')
-  if (bodies.length === 0) return
-  gsap.from(bodies, {
-    opacity: 0,
-    y: 16,
-    stagger: 0.08,
-    duration: 0.9,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: bodies[0] ?? null,
-      start: 'top 85%',
-      toggleActions: 'play none none none',
-      once: true
-    }
-  })
-}
-
 function boot(): void {
   initLenis()
   initNavScroll()
+  initTerminalCopy()
+  initProjectModal()
+  initCommandPalette()
   document.body.classList.add('is-ready')
 
   const idle = (cb: () => void): void => {
@@ -122,14 +214,8 @@ function boot(): void {
   }
 
   idle(() => {
-    initSectionReveals()
-    idle(() => {
-      initCardReveals()
-      idle(() => {
-        initAboutReveals()
-        ScrollTrigger.refresh()
-      })
-    })
+    initReveals()
+    ScrollTrigger.refresh()
   })
 }
 
