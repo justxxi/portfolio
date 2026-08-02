@@ -393,20 +393,128 @@
 
   .modal-header {
     display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .modal-meta-top {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.4rem;
+    padding-right: 2rem;
+  }
+
+  .modal-badge {
+    font-size: 0.72rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+  }
+
+  .modal-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .modal-title {
-    font-size: clamp(1.6rem, 2.5vw, 2rem);
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
     color: var(--color-ink);
+  }
+
+  .modal-tagline {
+    font-size: 0.82rem;
+    color: var(--color-accent-hover);
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-block: 1.25rem;
   }
 
   .modal-desc {
     color: var(--color-ink-muted);
+    font-size: 0.95rem;
     line-height: 1.6;
-    margin-bottom: 1.75rem;
+  }
+
+  .modal-terminal {
+    background: #090908;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .modal-terminal-top {
+    background: #141311;
+    padding: 0.4rem 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--color-ink-muted);
+    border-bottom: 1px solid rgba(245, 240, 232, 0.05);
+  }
+
+  .modal-copy-btn {
+    font-size: 0.72rem;
+    color: var(--color-accent-hover);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: rgba(200, 90, 60, 0.1);
+    transition: background 0.2s ease;
+  }
+
+  .modal-copy-btn:hover {
+    background: rgba(200, 90, 60, 0.25);
+  }
+
+  .modal-terminal-body {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-ink);
+  }
+
+  .modal-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .modal-subhead {
+    font-size: 0.72rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+  }
+
+  .modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .modal-tag-chip {
+    font-size: 0.75rem;
+    color: var(--color-ink);
+    background: rgba(58, 79, 89, 0.2);
+    border: 1px solid rgba(122, 140, 150, 0.25);
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-line-soft);
   }
 
   .cmd-overlay {

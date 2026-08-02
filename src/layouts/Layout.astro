@@ -64,22 +64,43 @@ const ogImage = `${siteUrl}/og.svg`
     <div class="modal-overlay" id="project-modal" aria-hidden="true" role="dialog" aria-modal="true">
       <div class="modal-card">
         <button class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
+        
         <div class="modal-header">
-          <span class="modal-badge font-mono" id="modal-badge">FEATURED</span>
-          <div>
-            <h3 class="modal-title font-display" id="modal-title">Project Name</h3>
-            <p class="modal-tagline" id="modal-tagline">Project Tagline</p>
+          <div class="modal-meta-top">
+            <span class="modal-badge font-mono" id="modal-badge">PUBLIC GITHUB REPO</span>
+            <div class="modal-stats-row">
+              <span class="star-badge" id="modal-stars">★ 0</span>
+              <span class="lang-badge" id="modal-lang">Python</span>
+            </div>
+          </div>
+          <h3 class="modal-title font-display" id="modal-title">Project Name<span class="accent-dot">.</span></h3>
+          <p class="modal-tagline font-mono" id="modal-tagline">Repository Overview</p>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-desc text-body" id="modal-desc">Project description</p>
+
+          <div class="modal-terminal" id="modal-terminal-box">
+            <div class="modal-terminal-top font-mono">
+              <span>bash &bull; clone command</span>
+              <button class="modal-copy-btn" id="modal-clone-btn">Copy 📋</button>
+            </div>
+            <div class="modal-terminal-body font-mono">
+              <span class="terminal-prompt">$</span>
+              <span class="modal-clone-cmd" id="modal-clone-cmd">git clone https://github.com/justxxi/repo.git</span>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h4 class="modal-subhead font-mono">STACK &amp; TAGS</h4>
+            <div class="modal-tags" id="modal-tags"></div>
           </div>
         </div>
-        <p class="modal-desc text-body" id="modal-desc">Project Description</p>
-        <div class="modal-section">
-          <h4 class="modal-subhead font-mono">TECHNOLOGY STACK</h4>
-          <div class="modal-tags" id="modal-tags"></div>
-        </div>
+
         <div class="modal-footer">
           <a class="pill pill--primary" id="modal-repo-btn" href="#" target="_blank" rel="noopener noreferrer">
-            <span>View GitHub Repository</span>
-            <span aria-hidden="true">→</span>
+            <span>Open Repository on GitHub</span>
+            <span aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
@@ -95,7 +116,7 @@ const ogImage = `${siteUrl}/og.svg`
         <div class="cmd-list" id="cmd-list">
           <button class="cmd-item" data-action="projects">
             <span class="cmd-item-icon">⚡</span>
-            <span class="cmd-item-text">View Featured Projects</span>
+            <span class="cmd-item-text">View Repositories</span>
             <span class="cmd-item-shortcut font-mono">#projects</span>
           </button>
           <button class="cmd-item" data-action="about">

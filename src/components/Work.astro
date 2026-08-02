@@ -131,7 +131,9 @@ try {
                 tagline: `${repo.language} repository`,
                 description: repo.description,
                 tags: [repo.language.toLowerCase(), 'open-source', 'github'],
-                repo: repo.html_url
+                repo: repo.html_url,
+                stars: repo.stargazers_count,
+                language: repo.language
               })}
               aria-label={`View modal details for ${repo.name}`}
             >

@@ -10,6 +10,8 @@ interface ModalProjectData {
   readonly description?: string
   readonly tags?: readonly string[]
   readonly repo?: string
+  readonly stars?: number
+  readonly language?: string
 }
 
 const REDUCED: boolean = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -63,20 +65,33 @@ function initTerminalCopy(): void {
 function initProjectModal(): void {
   const modal = document.getElementById('project-modal')
   const closeBtn = document.getElementById('modal-close-btn')
+  const toast = document.getElementById('copy-toast')
   if (!modal || !closeBtn) return
 
   const modalBadge = document.getElementById('modal-badge')
+  const modalStars = document.getElementById('modal-stars')
+  const modalLang = document.getElementById('modal-lang')
   const modalTitle = document.getElementById('modal-title')
   const modalTagline = document.getElementById('modal-tagline')
   const modalDesc = document.getElementById('modal-desc')
+  const modalCloneCmd = document.getElementById('modal-clone-cmd')
+  const modalCloneBtn = document.getElementById('modal-clone-btn')
   const modalTags = document.getElementById('modal-tags')
   const modalRepoBtn = document.getElementById('modal-repo-btn') as HTMLAnchorElement | null
 
+  let activeCloneUrl = ''
+
   function openModal(data: ModalProjectData): void {
-    if (modalBadge) modalBadge.textContent = 'GITHUB REPO'
+    if (modalBadge) modalBadge.textContent = 'PUBLIC GITHUB REPO'
+    if (modalStars) modalStars.textContent = `★ ${data.stars ?? 0}`
+    if (modalLang) modalLang.textContent = data.language || 'Code'
     if (modalTitle) modalTitle.textContent = data.name || ''
     if (modalTagline) modalTagline.textContent = data.tagline || ''
     if (modalDesc) modalDesc.textContent = data.description || ''
+
+    activeCloneUrl = data.repo ? `${data.repo}.git` : `https://github.com/justxxi/${data.name || 'repo'}.git`
+    if (modalCloneCmd) modalCloneCmd.textContent = `git clone ${activeCloneUrl}`
+
     if (modalRepoBtn && data.repo) modalRepoBtn.href = data.repo
 
     if (modalTags && Array.isArray(data.tags)) {
@@ -91,6 +106,19 @@ function initProjectModal(): void {
     modal.classList.remove('active')
     modal.setAttribute('aria-hidden', 'true')
   }
+
+  modalCloneBtn?.addEventListener('click', (e: Event) => {
+    e.stopPropagation()
+    if (activeCloneUrl) {
+      navigator.clipboard.writeText(`git clone ${activeCloneUrl}`).then(() => {
+        if (toast) {
+          toast.innerHTML = '<span style="color: #34d399;">✓</span> <span>Copied git clone command to clipboard!</span>'
+          toast.classList.add('show')
+          setTimeout(() => toast.classList.remove('show'), 2800)
+        }
+      })
+    }
+  })
 
   document.querySelectorAll<HTMLElement>('[data-project-json]').forEach((btn) => {
     btn.addEventListener('click', (e: Event) => {
