@@ -1,0 +1,86 @@
+﻿---
+const disciplines: readonly string[] = [
+  'Python',
+  'Go',
+  'TypeScript',
+  'FastAPI',
+  'PyTorch',
+  'Docker',
+  'PostgreSQL',
+  'Redis',
+  'Linux'
+]
+---
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {[0, 1].map(() => (
+      <div class="marquee__group">
+        {disciplines.map((item) => (
+          <span class="marquee__item">
+            <span class="marquee__word serif">{item}</span>
+            <span class="marquee__sep serif">&middot;</span>
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    border-block: 1px solid var(--color-line-soft);
+    padding-block: clamp(1.4rem, 3vh, 2.25rem);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-slide 46s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee__group {
+    display: flex;
+    align-items: center;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .marquee__word {
+    font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    line-height: 1;
+    color: var(--color-bone-muted);
+    white-space: nowrap;
+    padding-inline: clamp(1.75rem, 3.5vw, 3rem);
+  }
+
+  .marquee__sep {
+    color: var(--color-bone-muted);
+    opacity: 0.55;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    line-height: 1;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-slide {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

@@ -1,21 +1,19 @@
----
+﻿---
 const year: number = new Date().getFullYear()
 ---
 <footer class="footer" role="contentinfo">
   <div class="wrap footer__inner">
-    <p class="footer__copy">&copy; {year} justxxi. All rights reserved.</p>
-    <nav class="footer__links" aria-label="footer">
-      <a class="footer__link" href="https://github.com/justxxi/portfolio" target="_blank" rel="noopener noreferrer">Source</a>
-      <span class="footer__sep" aria-hidden="true">|</span>
-      <a class="footer__link" href="#top">Back to top ↑</a>
+    <p class="label">&copy; {year} justxxi</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a class="link-line" href="https://github.com/justxxi/portfolio" target="_blank" rel="noopener noreferrer">Source</a>
+      <a class="link-line" href="#top">Back to top</a>
     </nav>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: clamp(1.75rem, 3.5vh, 2.75rem);
-    background: var(--color-surface-2);
+    padding-block: clamp(1.75rem, 4vh, 2.75rem);
     border-top: 1px solid var(--color-line-soft);
   }
 
@@ -23,42 +21,13 @@ const year: number = new Date().getFullYear()
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
-  }
-
-  .footer__copy {
-    font-size: 0.8rem;
-    color: var(--color-ink-muted);
   }
 
   .footer__links {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-  }
-
-  .footer__link {
-    font-size: 0.8rem;
-    color: var(--color-ink-muted);
-    transition: color 0.2s ease;
-  }
-
-  .footer__link:hover,
-  .footer__link:focus-visible {
-    color: var(--color-accent-hover);
-  }
-
-  .footer__sep {
-    color: var(--color-line);
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 540px) {
-    .footer__inner {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+    gap: clamp(1.25rem, 3vw, 2rem);
   }
 </style>

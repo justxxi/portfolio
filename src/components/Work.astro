@@ -1,6 +1,5 @@
----
+﻿---
 interface GitHubRepo {
-  readonly id: number
   readonly name: string
   readonly description: string | null
   readonly html_url: string
@@ -10,52 +9,46 @@ interface GitHubRepo {
   readonly fork: boolean
 }
 
-interface RepoDisplayItem {
+interface RepoItem {
   readonly name: string
   readonly description: string
   readonly language: string
-  readonly stargazers_count: number
-  readonly html_url: string
-  readonly updated_at: string
+  readonly stars: number
+  readonly url: string
 }
 
-// Fallback systems
-const fallbackRepos: readonly RepoDisplayItem[] = [
+const fallbackRepos: readonly RepoItem[] = [
   {
     name: 'ai-orchestrator',
-    description: 'Pipeline for fine-tuning open-source LLMs, custom neural network workflows, and vector retrieval.',
+    description: 'Pipeline for fine-tuning open-source LLMs, custom neural network workflows and vector retrieval.',
     language: 'Python',
-    stargazers_count: 14,
-    html_url: 'https://github.com/justxxi',
-    updated_at: '2026-08-01'
+    stars: 14,
+    url: 'https://github.com/justxxi'
   },
   {
     name: 'cloud-backend',
-    description: 'High-concurrency microservices, REST/gRPC APIs, and async task processing engines in Go and Python.',
+    description: 'High-concurrency microservices, REST/gRPC APIs and async task processing in Go and Python.',
     language: 'Go',
-    stargazers_count: 19,
-    html_url: 'https://github.com/justxxi',
-    updated_at: '2026-07-28'
+    stars: 19,
+    url: 'https://github.com/justxxi'
   },
   {
     name: 'privacy-engine',
-    description: 'Local data encryption tools, OS hardware entropy credential generation, and offline utility engines.',
+    description: 'Local data encryption tools, hardware-entropy credential generation and offline utility engines.',
     language: 'Python',
-    stargazers_count: 11,
-    html_url: 'https://github.com/justxxi',
-    updated_at: '2026-07-20'
+    stars: 11,
+    url: 'https://github.com/justxxi'
   },
   {
     name: 'devops-toolkit',
-    description: 'Automated deployment configurations, Docker container orchestration, and server automation scripts.',
+    description: 'Automated deployment configurations, container orchestration and server automation scripts.',
     language: 'TypeScript',
-    stargazers_count: 16,
-    html_url: 'https://github.com/justxxi',
-    updated_at: '2026-07-10'
+    stars: 16,
+    url: 'https://github.com/justxxi'
   }
-] as const
+]
 
-let liveRepos: readonly RepoDisplayItem[] = fallbackRepos
+let repos: readonly RepoItem[] = fallbackRepos
 
 try {
   const res = await fetch('https://api.github.com/users/justxxi/repos?sort=updated&per_page=12', {
@@ -63,337 +56,206 @@ try {
   })
   if (res.ok) {
     const data: readonly GitHubRepo[] = await res.json()
-    const filtered = data.filter((r) => !r.fork && r.name.toLowerCase() !== 'portfolio' && r.name.toLowerCase() !== 'justxxi')
+    const filtered = data.filter(
+      (r) => !r.fork && r.name.toLowerCase() !== 'portfolio' && r.name.toLowerCase() !== 'justxxi'
+    )
     if (filtered.length > 0) {
-      liveRepos = filtered.map((r) => ({
+      repos = filtered.map((r) => ({
         name: r.name,
-        description: r.description || 'Open source software project built by justxxi.',
+        description: r.description || 'Open-source software project built by justxxi.',
         language: r.language || 'Code',
-        stargazers_count: r.stargazers_count,
-        html_url: r.html_url,
-        updated_at: r.updated_at.split('T')[0]
+        stars: r.stargazers_count,
+        url: r.html_url
       }))
     }
   }
-} catch {
-}
+} catch {}
 ---
-<section class="work" id="projects" data-section aria-labelledby="work-title">
+<section class="works" id="works" aria-labelledby="works-title">
   <div class="wrap">
-    <header class="section-head">
-      <div class="repo-sync-badge">
-        <span class="sync-dot"></span>
-        <span id="repo-sync-status">Live Repositories &bull; Synced with GitHub API</span>
-      </div>
-      <h2 class="section-title text-h2 font-display will-split" id="work-title">
-        Public Code Repositories<span class="accent-dot">.</span>
+    <header class="works__head">
+      <h2 class="works__title serif" id="works-title">
+        <span class="mask"><span class="mask__inner" data-reveal>Selected works</span></span>
       </h2>
-      <p class="section-sub text-lead">
-        Repositories fetched live from GitHub. Built for performance, security, and cloud scalability.
-      </p>
+      <p class="works__count mono" data-fade>({String(repos.length).padStart(2, '0')})</p>
     </header>
 
-    <div class="repos__grid" id="repos-container" role="list">
-      {liveRepos.map((repo) => (
-        <article class="repo-card card" role="listitem">
-          <div class="repo__top">
-            <div class="repo__meta">
-              <span class="lang-badge">
-                <span class="lang-dot" data-lang={repo.language}></span>
-                <span>{repo.language}</span>
-              </span>
-              <span class="star-badge">
-                ★ <span>{repo.stargazers_count}</span>
-              </span>
-            </div>
-            <a
-              class="repo__link"
-              href={repo.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`View ${repo.name} repository on GitHub`}
-            >
-              <span>GitHub ↗</span>
-            </a>
-          </div>
-
-          <div class="repo__head">
-            <h3 class="repo__name font-display">{repo.name}</h3>
-          </div>
-
-          <p class="repo__desc text-body">{repo.description}</p>
-
-          <div class="repo__foot">
-            <span class="repo__date font-mono">Updated: {repo.updated_at}</span>
-            <button
-              class="repo__details-btn"
-              data-project-json={JSON.stringify({
-                name: repo.name,
-                tagline: `${repo.language} repository`,
-                description: repo.description,
-                tags: [repo.language.toLowerCase(), 'open-source', 'github'],
-                repo: repo.html_url,
-                stars: repo.stargazers_count,
-                language: repo.language
-              })}
-              aria-label={`View modal details for ${repo.name}`}
-            >
-              <span>Details →</span>
-            </button>
-          </div>
-        </article>
+    <ul class="index" role="list">
+      {repos.map((repo, i) => (
+        <li>
+          <a
+            class="row"
+            href={repo.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-row
+            aria-label={`${repo.name}, ${repo.language}, ${repo.stars} stars, open on GitHub`}
+          >
+            <span class="row__num serif">Cat.&nbsp;{String(i + 1).padStart(2, '0')}</span>
+            <span class="row__main">
+              <span class="row__name serif">{repo.name}</span>
+              <span class="row__desc">{repo.description}</span>
+            </span>
+            <span class="row__side mono">
+              <span>{repo.language}</span>
+              <span>&#9733; {repo.stars}</span>
+            </span>
+            <span class="row__arrow" aria-hidden="true">&nearr;</span>
+          </a>
+        </li>
       ))}
+    </ul>
+
+    <div class="works__foot">
+      <a class="link-line" href="https://github.com/justxxi" target="_blank" rel="noopener noreferrer">
+        Full archive on GitHub</a>
     </div>
   </div>
 </section>
 
-<!-- Client-side Real-time GitHub API Hydration -->
-<script>
-  async function hydrateGitHubRepos() {
-    const container = document.getElementById('repos-container')
-    const syncStatus = document.getElementById('repo-sync-status')
-    if (!container) return
-
-    try {
-      const res = await fetch('https://api.github.com/users/justxxi/repos?sort=updated&per_page=12')
-      if (!res.ok) return
-      const data = await res.json()
-      if (!Array.isArray(data)) return
-
-      const filtered = data.filter((r: any) => !r.fork && r.name.toLowerCase() !== 'portfolio' && r.name.toLowerCase() !== 'justxxi')
-      if (filtered.length === 0) return
-
-      const cardsHtml = filtered.map((r: any) => {
-        const lang = r.language || 'Code'
-        const stars = r.stargazers_count || 0
-        const desc = r.description || 'Open source software project built by justxxi.'
-        const updatedAt = (r.updated_at || '').split('T')[0] || ''
-        const repoUrl = r.html_url
-        const projectJson = JSON.stringify({
-          name: r.name,
-          tagline: `${lang} repository`,
-          description: desc,
-          tags: [lang.toLowerCase(), 'open-source', 'github'],
-          repo: repoUrl,
-          stars: stars,
-          language: lang
-        })
-
-        return `
-          <article class="repo-card card" role="listitem">
-            <div class="repo__top">
-              <div class="repo__meta">
-                <span class="lang-badge">
-                  <span class="lang-dot" data-lang="${lang}"></span>
-                  <span>${lang}</span>
-                </span>
-                <span class="star-badge">
-                  ★ <span>${stars}</span>
-                </span>
-              </div>
-              <a
-                class="repo__link"
-                href="${repoUrl}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="View ${r.name} repository on GitHub"
-              >
-                <span>GitHub ↗</span>
-              </a>
-            </div>
-
-            <div class="repo__head">
-              <h3 class="repo__name font-display">${r.name}</h3>
-            </div>
-
-            <p class="repo__desc text-body">${desc}</p>
-
-            <div class="repo__foot">
-              <span class="repo__date font-mono">Updated: ${updatedAt}</span>
-              <button
-                class="repo__details-btn"
-                data-project-json='${projectJson.replace(/'/g, "&apos;")}'
-                aria-label="View modal details for ${r.name}"
-              >
-                <span>Details →</span>
-              </button>
-            </div>
-          </article>
-        `
-      }).join('')
-
-      container.innerHTML = cardsHtml
-      if (syncStatus) syncStatus.textContent = 'Live Repositories • Synced Real-Time with GitHub API'
-
-      // Re-attach modal trigger listeners to newly hydrated DOM elements
-      document.querySelectorAll<HTMLElement>('[data-project-json]').forEach((btn) => {
-        btn.addEventListener('click', (e: Event) => {
-          e.stopPropagation()
-          const jsonStr = btn.getAttribute('data-project-json')
-          if (jsonStr) {
-            try {
-              const modal = document.getElementById('project-modal')
-              const modalBadge = document.getElementById('modal-badge')
-              const modalStars = document.getElementById('modal-stars')
-              const modalLang = document.getElementById('modal-lang')
-              const modalTitle = document.getElementById('modal-title')
-              const modalTagline = document.getElementById('modal-tagline')
-              const modalDesc = document.getElementById('modal-desc')
-              const modalCloneCmd = document.getElementById('modal-clone-cmd')
-              const modalTags = document.getElementById('modal-tags')
-              const modalRepoBtn = document.getElementById('modal-repo-btn') as HTMLAnchorElement | null
-
-              const parsed = JSON.parse(jsonStr)
-              if (modalBadge) modalBadge.textContent = 'PUBLIC GITHUB REPO'
-              if (modalStars) modalStars.textContent = `★ ${parsed.stars ?? 0}`
-              if (modalLang) modalLang.textContent = parsed.language || 'Code'
-              if (modalTitle) modalTitle.textContent = parsed.name || ''
-              if (modalTagline) modalTagline.textContent = parsed.tagline || ''
-              if (modalDesc) modalDesc.textContent = parsed.description || ''
-              if (modalCloneCmd) modalCloneCmd.textContent = `git clone ${parsed.repo}.git`
-              if (modalRepoBtn && parsed.repo) modalRepoBtn.href = parsed.repo
-
-              if (modalTags && Array.isArray(parsed.tags)) {
-                modalTags.innerHTML = parsed.tags.map((t: string) => `<span class="modal-tag-chip font-mono">#${t}</span>`).join('')
-              }
-
-              if (modal) {
-                modal.classList.add('active')
-                modal.setAttribute('aria-hidden', 'false')
-              }
-            } catch (err) {
-              console.error('Failed to parse project json', err)
-            }
-          }
-        })
-      })
-    } catch {
-      // Keep static SSR fallback
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', hydrateGitHubRepos)
-  } else {
-    hydrateGitHubRepos()
-  }
-</script>
-
 <style>
-  .work {
+  .works {
     padding-block: var(--section-gap);
   }
 
-  .section-head {
-    text-align: center;
+  .works__head {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: baseline;
     gap: 1rem;
-    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+    margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
   }
 
-  .repo-sync-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    background: rgba(16, 185, 129, 0.08);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    font-size: 0.78rem;
-    color: #34d399;
-    font-family: var(--font-mono);
+  .works__title {
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
   }
 
-  .sync-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #34d399;
-    box-shadow: 0 0 8px #34d399;
-  }
-
-  .section-title {
-    color: var(--color-ink);
-    max-width: 22ch;
-  }
-
-  .accent-dot {
-    color: var(--color-accent);
-  }
-
-  .section-sub {
-    color: var(--color-ink-muted);
-    max-width: 48ch;
-  }
-
-  .repos__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: clamp(1.2rem, 2vw, 1.8rem);
-  }
-
-  .repo-card {
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-    min-height: 250px;
-  }
-
-  .repo__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .repo__meta {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .repo__link {
+  .works__count {
     font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--color-accent-hover);
+    color: var(--color-accent-bright);
   }
 
-  .repo__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .repo__name {
-    color: var(--color-ink);
-    font-size: clamp(1.4rem, 2vw, 1.75rem);
-    letter-spacing: -0.015em;
-  }
-
-  .repo__desc {
-    color: var(--color-ink-muted);
-    font-size: 0.92rem;
-    line-height: 1.6;
-    flex: 1;
-  }
-
-  .repo__foot {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 0.75rem;
+  .index li {
     border-top: 1px solid var(--color-line-soft);
   }
 
-  .repo__date {
-    font-size: 0.72rem;
-    color: var(--color-ink-muted);
+  .index li:last-child {
+    border-bottom: 1px solid var(--color-line-soft);
   }
 
-  .repo__details-btn {
-    font-size: 0.8rem;
-    color: var(--color-accent-hover);
-    font-weight: 500;
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 5.5rem 1fr auto 2rem;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding-block: clamp(1.4rem, 3vh, 2rem);
+    isolation: isolate;
+  }
+
+  .row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-ground-deep);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .row:hover::before {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+
+  .row__num {
+    font-style: italic;
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+    color: var(--color-bone-muted);
+    transition: color 0.35s var(--ease-out);
+  }
+
+  .row:hover .row__num {
+    color: var(--color-accent-bright);
+  }
+
+  .row__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .row__name {
+    font-size: clamp(1.55rem, 3vw, 2.35rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .row:hover .row__name {
+    transform: translateX(14px);
+  }
+
+  .row__desc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-bone-muted);
+    max-width: 56ch;
+  }
+
+  .row__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--color-bone-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .row__arrow {
+    font-size: 1.15rem;
+    color: var(--color-accent-bright);
+    opacity: 0;
+    transform: translate(-8px, 8px);
+    transition:
+      opacity 0.35s var(--ease-out),
+      transform 0.45s var(--ease-out);
+  }
+
+  .row:hover .row__arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .works__foot {
+    display: flex;
+    justify-content: center;
+    padding-top: clamp(2.25rem, 5vh, 3.5rem);
+  }
+
+  @media (max-width: 720px) {
+    .row {
+      grid-template-columns: 1fr;
+      row-gap: 0.75rem;
+    }
+
+    .row__side {
+      grid-column: 2;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1rem;
+    }
+
+    .row__arrow {
+      display: none;
+    }
   }
 </style>

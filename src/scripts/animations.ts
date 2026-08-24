@@ -4,249 +4,321 @@ import Lenis from 'lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
-interface ModalProjectData {
-  readonly name?: string
-  readonly tagline?: string
-  readonly description?: string
-  readonly tags?: readonly string[]
-  readonly repo?: string
-  readonly stars?: number
-  readonly language?: string
-}
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const REDUCED: boolean = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+let lenis: Lenis | null = null
 
-function initLenis(): Lenis | null {
-  if (REDUCED) return null
-  const lenis = new Lenis({
+function initLenis(): void {
+  if (REDUCED) return
+  lenis = new Lenis({
     autoRaf: false,
-    lerp: 0.08,
+    lerp: 0.09,
     allowNestedScroll: true
   })
   lenis.on('scroll', ScrollTrigger.update)
-  gsap.ticker.add((time: number) => {
-    lenis.raf(time * 1000)
+  gsap.ticker.add((time) => {
+    lenis?.raf(time * 1000)
   })
   gsap.ticker.lagSmoothing(0)
-  return lenis
+  const hash = window.location.hash
+  if (hash && document.querySelector(hash)) {
+    lenis.scrollTo(hash, { immediate: true, force: true })
+  }
 }
 
-function initNavScroll(): void {
+function scrollToTarget(hash: string): void {
+  if (lenis) {
+    lenis.scrollTo(hash, { offset: -(64 + 24), duration: 1.2 })
+    return
+  }
+  document.querySelector(hash)?.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' })
+}
+
+function initAnchors(): void {
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]')
+    if (!anchor) return
+    const hash = anchor.getAttribute('href')
+    if (!hash || hash === '#') return
+    e.preventDefault()
+    scrollToTarget(hash)
+  })
+}
+
+function initNavState(): void {
   const nav = document.querySelector<HTMLElement>('[data-nav]')
   if (!nav) return
-  const update = (): void => {
-    nav.dataset.scrolled = window.scrollY > 12 ? 'true' : 'false'
-  }
-  update()
   ScrollTrigger.create({
-    start: 'top -12',
-    end: 99999,
-    onUpdate: update
+    start: 16,
+    end: 'max',
+    onUpdate: () => {
+      nav.dataset.scrolled = window.scrollY > 16 ? 'true' : 'false'
+    }
   })
 }
 
-function initTerminalCopy(): void {
-  const terminal = document.getElementById('hero-terminal')
-  const toast = document.getElementById('copy-toast')
-  if (!terminal) return
+function initClock(): void {
+  const clock = document.getElementById('clock')
+  if (!clock) return
+  const fmt = new Intl.DateTimeFormat(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  })
+  const tick = () => {
+    clock.textContent = fmt.format(new Date())
+  }
+  tick()
+  window.setInterval(tick, 1000)
+}
 
-  terminal.addEventListener('click', () => {
-    const cmdText = 'gh repo list justxxi --limit 5'
-    navigator.clipboard.writeText(cmdText).then(() => {
-      if (toast) {
-        toast.innerHTML = '<span style="color: #34d399;">✓</span> <span>Copied gh repo list command to clipboard!</span>'
-        toast.classList.add('show')
-        setTimeout(() => toast.classList.remove('show'), 2800)
-      }
+let toastTimer = 0
+
+function showToast(message: string): void {
+  const toast = document.getElementById('toast')
+  const text = document.getElementById('toast-text')
+  if (!toast || !text) return
+  text.textContent = message
+  toast.classList.add('show')
+  window.clearTimeout(toastTimer)
+  toastTimer = window.setTimeout(() => toast.classList.remove('show'), 2600)
+}
+
+function initCopyEmail(): void {
+  document.querySelectorAll<HTMLElement>('[data-copy-email]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const email = btn.dataset.copyEmail
+      if (!email) return
+      navigator.clipboard.writeText(email).then(() => showToast('Email copied to clipboard'))
     })
   })
 }
 
-function initProjectModal(): void {
-  const modal = document.getElementById('project-modal')
-  const closeBtn = document.getElementById('modal-close-btn')
-  const toast = document.getElementById('copy-toast')
-  if (!modal || !closeBtn) return
-
-  const modalBadge = document.getElementById('modal-badge')
-  const modalStars = document.getElementById('modal-stars')
-  const modalLang = document.getElementById('modal-lang')
-  const modalTitle = document.getElementById('modal-title')
-  const modalTagline = document.getElementById('modal-tagline')
-  const modalDesc = document.getElementById('modal-desc')
-  const modalCloneCmd = document.getElementById('modal-clone-cmd')
-  const modalCloneBtn = document.getElementById('modal-clone-btn')
-  const modalTags = document.getElementById('modal-tags')
-  const modalRepoBtn = document.getElementById('modal-repo-btn') as HTMLAnchorElement | null
-
-  let activeCloneUrl = ''
-
-  function openModal(data: ModalProjectData): void {
-    if (modalBadge) modalBadge.textContent = 'PUBLIC GITHUB REPO'
-    if (modalStars) modalStars.textContent = `★ ${data.stars ?? 0}`
-    if (modalLang) modalLang.textContent = data.language || 'Code'
-    if (modalTitle) modalTitle.textContent = data.name || ''
-    if (modalTagline) modalTagline.textContent = data.tagline || ''
-    if (modalDesc) modalDesc.textContent = data.description || ''
-
-    activeCloneUrl = data.repo ? `${data.repo}.git` : `https://github.com/justxxi/${data.name || 'repo'}.git`
-    if (modalCloneCmd) modalCloneCmd.textContent = `git clone ${activeCloneUrl}`
-
-    if (modalRepoBtn && data.repo) modalRepoBtn.href = data.repo
-
-    if (modalTags && Array.isArray(data.tags)) {
-      modalTags.innerHTML = data.tags.map((t: string) => `<span class="modal-tag-chip font-mono">#${t}</span>`).join('')
-    }
-
-    modal.classList.add('active')
-    modal.setAttribute('aria-hidden', 'false')
-  }
-
-  function closeModal(): void {
-    modal.classList.remove('active')
-    modal.setAttribute('aria-hidden', 'true')
-  }
-
-  modalCloneBtn?.addEventListener('click', (e: Event) => {
-    e.stopPropagation()
-    if (activeCloneUrl) {
-      navigator.clipboard.writeText(`git clone ${activeCloneUrl}`).then(() => {
-        if (toast) {
-          toast.innerHTML = '<span style="color: #34d399;">✓</span> <span>Copied git clone command to clipboard!</span>'
-          toast.classList.add('show')
-          setTimeout(() => toast.classList.remove('show'), 2800)
-        }
-      })
-    }
-  })
-
-  document.querySelectorAll<HTMLElement>('[data-project-json]').forEach((btn) => {
-    btn.addEventListener('click', (e: Event) => {
-      e.stopPropagation()
-      const jsonStr = btn.getAttribute('data-project-json')
-      if (jsonStr) {
-        try {
-          const data: ModalProjectData = JSON.parse(jsonStr)
-          openModal(data)
-        } catch (err) {
-          console.error('Failed to parse project json', err)
-        }
-      }
-    })
-  })
-
-  closeBtn.addEventListener('click', closeModal)
-  modal.addEventListener('click', (e: Event) => {
-    if (e.target === modal) closeModal()
-  })
-
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal()
-    }
-  })
+function setInitialStates(): void {
+  gsap.set('[data-hero-line]', { yPercent: 115 })
+  gsap.set('[data-reveal]', { yPercent: 115 })
+  gsap.set('[data-fade]', { y: 28, opacity: 0 })
+  gsap.set('[data-line]', { scaleX: 0 })
+  gsap.set('[data-row]', { y: 36, opacity: 0 })
 }
 
-function initCommandPalette(): void {
-  const cmd = document.getElementById('cmd-palette')
-  const cmdTriggerBtn = document.getElementById('cmd-trigger-btn')
-  const heroCmdBtn = document.getElementById('hero-cmd-btn')
-  const cmdInput = document.getElementById('cmd-input') as HTMLInputElement | null
-  const toast = document.getElementById('copy-toast')
-  if (!cmd) return
+function introTimeline(): gsap.core.Timeline | null {
+  const panels = gsap.utils.toArray<HTMLElement>('.intro__panel')
+  const mark = document.querySelector<HTMLElement>('.intro__mark')
+  const overlay = document.querySelector<HTMLElement>('.intro')
+  if (!panels.length) return null
 
-  function openCmd(): void {
-    cmd?.classList.add('active')
-    cmd?.setAttribute('aria-hidden', 'false')
-    setTimeout(() => cmdInput?.focus(), 50)
+  const tl = gsap.timeline()
+  if (mark) {
+    tl.from(mark, { opacity: 0, duration: 0.5, ease: 'power2.out' })
+      .to(mark, { opacity: 0, duration: 0.35, ease: 'power2.in' }, '+=0.15')
   }
-
-  function closeCmd(): void {
-    cmd?.classList.remove('active')
-    cmd?.setAttribute('aria-hidden', 'true')
-    if (cmdInput) cmdInput.value = ''
+  tl.to(panels, {
+    yPercent: (i) => (i === 0 ? -101 : 101),
+    duration: 1,
+    ease: 'expo.inOut',
+    stagger: 0.06
+  })
+  if (overlay) {
+    tl.set(overlay, { display: 'none' })
   }
-
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-      e.preventDefault()
-      if (cmd.classList.contains('active')) closeCmd()
-      else openCmd()
-    } else if (e.key === 'Escape' && cmd.classList.contains('active')) {
-      closeCmd()
-    }
-  })
-
-  cmdTriggerBtn?.addEventListener('click', openCmd)
-  heroCmdBtn?.addEventListener('click', openCmd)
-
-  cmd.addEventListener('click', (e: Event) => {
-    if (e.target === cmd) closeCmd()
-  })
-
-  document.querySelectorAll<HTMLElement>('[data-action]').forEach((item) => {
-    item.addEventListener('click', () => {
-      const action = item.getAttribute('data-action')
-      closeCmd()
-
-      if (action === 'projects') {
-        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (action === 'about') {
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (action === 'contact') {
-        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-      } else if (action === 'copy-email') {
-        navigator.clipboard.writeText('wyurtrft@proton.me').then(() => {
-          if (toast) {
-            toast.innerHTML = '<span style="color: var(--color-accent);">●</span> <span>Email copied to clipboard!</span>'
-            toast.classList.add('show')
-            setTimeout(() => toast.classList.remove('show'), 2800)
-          }
-        })
-      } else if (action === 'github') {
-        window.open('https://github.com/justxxi', '_blank')
-      }
-    })
-  })
+  return tl
 }
 
-function initReveals(): void {
+function heroReveal(delay = 0): void {
+  const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]')
+  const fades = gsap.utils.toArray<HTMLElement>('.hero [data-fade]')
+  const tl = gsap.timeline({ delay })
+
+  tl.to(lines, {
+    yPercent: 0,
+    duration: 1.1,
+    ease: 'expo.out',
+    stagger: 0.09
+  }).to(
+    fades,
+    {
+      y: 0,
+      opacity: 1,
+      duration: 0.9,
+      ease: 'power3.out',
+      stagger: 0.08
+    },
+    '-=0.7'
+  )
+}
+
+function playIntro(): void {
+  if (REDUCED) {
+    gsap.set('.intro', { display: 'none' })
+    return
+  }
+  setInitialStates()
+
+  const introTl = introTimeline()
+  heroReveal(Math.max(0, (introTl?.duration() ?? 1) - 0.6))
+}
+
+function initScrollReveals(): void {
   if (REDUCED) return
 
-  gsap.utils.toArray<HTMLElement>('.card').forEach((card) => {
-    gsap.from(card, {
-      opacity: 0,
-      y: 20,
-      duration: 0.7,
-      ease: 'power3.out',
+  gsap.utils.toArray<HTMLElement>('main [data-reveal]').forEach((el) => {
+    if (el.closest('.hero')) return
+    gsap.to(el, {
+      yPercent: 0,
+      duration: 1,
+      ease: 'expo.out',
       scrollTrigger: {
-        trigger: card,
-        start: 'top 88%',
-        toggleActions: 'play none none none',
+        trigger: el.parentElement ?? el,
+        start: 'top 86%',
+        once: true
+      }
+    })
+  })
+
+  ScrollTrigger.batch(
+    gsap.utils
+      .toArray<HTMLElement>('main [data-fade]')
+      .filter((el) => !el.closest('.hero')),
+    {
+    start: 'top 88%',
+    once: true,
+    onEnter: (batch) =>
+      gsap.to(batch, {
+        y: 0,
+        opacity: 1,
+        duration: 0.85,
+        ease: 'power3.out',
+        stagger: 0.09
+      })
+    }
+  )
+
+  ScrollTrigger.batch('[data-row]', {
+    start: 'top 92%',
+    once: true,
+    onEnter: (batch) =>
+      gsap.to(batch, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.07
+      })
+  })
+
+  gsap.utils.toArray<HTMLElement>('[data-line]').forEach((el) => {
+    gsap.to(el, {
+      scaleX: 1,
+      duration: 1.1,
+      ease: 'expo.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 90%',
         once: true
       }
     })
   })
 }
 
+function initProgress(): void {
+  if (REDUCED) return
+  const bar = document.querySelector<HTMLElement>('.nav__progress')
+  if (!bar) return
+  gsap.to(bar, {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: {
+      start: 0,
+      end: 'max',
+      scrub: 0.4
+    }
+  })
+}
+
+function initHeroDrift(): void {
+  if (REDUCED) return
+  const hero = document.querySelector<HTMLElement>('.hero')
+  const inner = document.querySelector<HTMLElement>('.hero__inner')
+  if (!hero || !inner) return
+  gsap.to(inner, {
+    yPercent: -7,
+    opacity: 0.25,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom 35%',
+      scrub: true
+    }
+  })
+}
+
+function initRail(): void {
+  const items = document.querySelectorAll<HTMLElement>('[data-rail]')
+  if (!items.length) return
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      const id = item.dataset.rail
+      if (id) scrollToTarget(`#${id}`)
+    })
+  })
+  if (REDUCED) return
+  items.forEach((item) => {
+    const id = item.dataset.rail
+    if (!id) return
+    const section = document.getElementById(id)
+    if (!section) return
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top center',
+      end: 'bottom center',
+      onToggle: (self) => item.classList.toggle('is-active', self.isActive)
+    })
+  })
+}
+
+function initMagnet(): void {
+  if (REDUCED || !window.matchMedia('(pointer: fine)').matches) return
+  document.querySelectorAll<HTMLElement>('[data-magnet]').forEach((el) => {
+    const xTo = gsap.quickTo(el, 'x', { duration: 0.45, ease: 'power3' })
+    const yTo = gsap.quickTo(el, 'y', { duration: 0.45, ease: 'power3' })
+    el.addEventListener('pointermove', (e) => {
+      const rect = el.getBoundingClientRect()
+      xTo((e.clientX - rect.left - rect.width / 2) * 0.22)
+      yTo((e.clientY - rect.top - rect.height / 2) * 0.32)
+    })
+    el.addEventListener('pointerleave', () => {
+      xTo(0)
+      yTo(0)
+    })
+  })
+}
+
 function boot(): void {
   initLenis()
-  initNavScroll()
-  initTerminalCopy()
-  initProjectModal()
-  initCommandPalette()
-  document.body.classList.add('is-ready')
+  initAnchors()
+  initNavState()
+  initClock()
+  initCopyEmail()
+  initRail()
+  playIntro()
+  initScrollReveals()
+  initHeroDrift()
+  initProgress()
+  initMagnet()
+  ScrollTrigger.refresh()
 
-  const idle = (cb: () => void): void => {
-    const ric = (window as Window & { requestIdleCallback?: (cb: IdleRequestCallback) => number }).requestIdleCallback
-    if (typeof ric === 'function') ric(() => cb())
-    else window.setTimeout(cb, 1)
-  }
+  const idle = () => ScrollTrigger.refresh()
+  const ric = (
+    window as Window & { requestIdleCallback?: (cb: () => void) => number }
+  ).requestIdleCallback
+  if (typeof ric === 'function') ric(idle)
+  else window.setTimeout(idle, 200)
 
-  idle(() => {
-    initReveals()
-    ScrollTrigger.refresh()
-  })
+  window.addEventListener('load', () => ScrollTrigger.refresh())
 }
 
 if (document.readyState === 'loading') {

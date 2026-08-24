@@ -1,184 +1,163 @@
+﻿---
+const stack: readonly { label: string; items: readonly string[] }[] = [
+  {
+    label: 'Engineering',
+    items: ['Python & FastAPI', 'PyTorch, Transformers, LLM fine-tuning', 'Go microservices', 'TypeScript, Astro, React, Node.js']
+  },
+  {
+    label: 'Infrastructure',
+    items: ['Docker & Linux servers', 'PostgreSQL, Redis, pgvector', 'CI/CD & cloud deployment']
+  }
+]
 ---
-const techStack: readonly string[] = [
-  'Python (FastAPI, PyTorch, Transformers)',
-  'Go (Microservices & High-Concurrency)',
-  'TypeScript (Astro, React, Node.js)',
-  'AI Model Fine-Tuning & LLM Workflows',
-  'Cloud Infrastructure & DevOps (Docker, Linux)',
-  'PostgreSQL, Redis & Vector DBs (pgvector)'
-] as const
----
-<section class="about" id="about" data-section aria-labelledby="about-title">
+<section class="about" id="about" aria-labelledby="about-title">
   <div class="wrap">
-    <header class="section-head">
-      <p class="eyebrow">about me</p>
-      <h2 class="section-title text-h2 font-display will-split" id="about-title">
-        Behind the Code<span class="accent-dot">.</span>
-      </h2>
-    </header>
-
     <div class="about__grid">
-      <div class="about__lead">
-        <!--email_off-->
-        <p class="about-quote font-display">
-          &ldquo;I love building practical web apps, training custom AI models, and shipping clean backend code.&rdquo;
-        </p>
-        <p class="about-body">
-          I&rsquo;m a full-stack software engineer with 3+ years of hands-on experience (Middle level). My main stack is Python, Go, and TypeScript, but what really drives me is AI engineering and cloud infrastructure.
-        </p>
-        <p class="about-body">
-          I enjoy fine-tuning open-source LLMs, building custom neural network pipelines, and setting up clean DevOps environments with Docker and Linux servers.
-        </p>
-        <!--/email_off-->
-        <div class="about-meta-box">
-          <span class="meta-icon">●</span>
-          <p class="about-meta">Middle Full-Stack &amp; AI Engineer &bull; 3+ years experience &bull; Remote</p>
-        </div>
-      </div>
+    <div class="about__left">
+      <h2 class="about__quote serif" id="about-title" data-fade>
+        Practical apps, custom models, clean backend code. <em>Built to last</em>.
+      </h2>
+      <p class="about__meta mono" data-fade>
+        Middle Full-Stack &amp; AI Engineer &middot; 3+ years &middot; Remote
+      </p>
+    </div>
 
-      <aside class="about__caps card" aria-label="tech stack">
-        <div class="caps__head">
-          <p class="caps__label font-mono">Tech Stack &amp; Focus</p>
-          <span class="caps__symbol font-mono">🛠</span>
-        </div>
-        <ul class="caps" role="list">
-          {techStack.map((item) => (
-            <li class="caps__item" data-cap>{item}</li>
-          ))}
-        </ul>
-      </aside>
+    <div class="about__right">
+      <p class="about__body about__body--first" data-fade>
+        I&rsquo;m a full-stack software engineer with three years of hands-on experience. My main
+        stack is Python, Go and TypeScript; what drives me most is AI engineering and cloud
+        infrastructure.
+      </p>
+      <p class="about__body" data-fade>
+        I enjoy fine-tuning open-source LLMs, building neural network pipelines and setting up
+        clean DevOps environments with Docker and Linux servers.
+      </p>
+
+      <div class="about__stack">
+        {stack.map((group) => (
+          <div class="stack-group" data-fade>
+            <p class="stack-group__label mono">{group.label}</p>
+            <ul role="list">
+              {group.items.map((item) => (
+                <li class="stack-group__item">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
+</div>
 </section>
 
 <style>
   .about {
     padding-block: var(--section-gap);
-    background: var(--color-surface-2);
-    border-y: 1px solid var(--color-line-soft);
-  }
-
-  .section-head {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: clamp(3rem, 6vw, 4.5rem);
-  }
-
-  .section-title {
-    color: var(--color-ink);
-  }
-
-  .accent-dot {
-    color: var(--color-accent);
+    border-top: 1px solid var(--color-line-soft);
   }
 
   .about__grid {
     display: grid;
-    grid-template-columns: 1.35fr 1fr;
-    gap: clamp(2rem, 4vw, 4rem);
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(2.5rem, 6vw, 6rem);
     align-items: start;
   }
 
-  .about__lead {
+  .about__left {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 2rem;
+    position: sticky;
+    top: calc(var(--nav-h) + 3rem);
   }
 
-  .about-quote {
-    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-    line-height: 1.45;
-    color: var(--color-ink);
-    border-left: 2px solid var(--color-accent);
-    padding-left: 1.25rem;
+  .about__quote {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    max-width: 16ch;
   }
 
-  .about-body {
-    font-size: var(--text-lead);
-    line-height: 1.6;
-    color: var(--color-ink-muted);
-    max-width: 44ch;
+  .about__quote em {
+    font-style: italic;
+    color: var(--color-accent-bright);
   }
 
-  .about-meta-box {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1.2rem;
-    background: rgba(99, 102, 241, 0.06);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    border-radius: var(--radius-md);
-    margin-top: 0.5rem;
-  }
-
-  .meta-icon {
-    color: var(--color-accent);
-    font-size: 0.6rem;
-  }
-
-  .about-meta {
-    font-size: 0.85rem;
-    color: var(--color-ink);
-    font-weight: 500;
-  }
-
-  .about__caps {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .caps__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--color-line-soft);
-  }
-
-  .caps__label {
-    font-size: 0.75rem;
-    font-weight: 600;
+  .about__meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-accent);
+    color: var(--color-bone-muted);
   }
 
-  .caps__symbol {
-    color: var(--color-accent);
-    font-size: 0.9rem;
-  }
-
-  .caps {
-    list-style: none;
+  .about__right {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.4rem;
+    padding-top: 0.5rem;
   }
 
-  .caps__item {
-    font-size: var(--text-sm);
-    color: var(--color-ink);
-    position: relative;
-    padding-left: 1.25rem;
+  .about__body {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--color-bone-muted);
+    max-width: 52ch;
   }
 
-  .caps__item::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 0.75rem;
-    color: #34d399;
+  .about__body--first::first-letter {
+    font-family: var(--font-display);
     font-weight: 600;
+    font-size: 3.4em;
+    line-height: 0.76;
+    float: left;
+    padding: 0.06em 0.14em 0 0;
+    color: var(--color-bone);
   }
 
-  @media (max-width: 820px) {
+  .about__stack {
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .stack-group {
+    display: grid;
+    grid-template-columns: minmax(7.5rem, 10rem) 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+  }
+
+  .stack-group__label {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent-bright);
+  }
+
+  .stack-group ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stack-group__item {
+    padding-block: 0.55rem;
+    border-top: 1px solid var(--color-line-soft);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 900px) {
     .about__grid {
       grid-template-columns: 1fr;
+    }
+
+    .about__left {
+      position: static;
+    }
+
+    .stack-group {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
     }
   }
 </style>

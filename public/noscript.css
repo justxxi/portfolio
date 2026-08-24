@@ -1,15 +1,3 @@
-.will-split {
-  opacity: 1 !important;
-}
-
-.hero__title,
-.hero__lead,
-.hero__eyebrow,
-.hero__actions,
-.nav__mark,
-.nav__link {
-  animation: none !important;
-  filter: none !important;
-  opacity: 1 !important;
-  transform: none !important;
+﻿.intro {
+  display: none !important;
 }

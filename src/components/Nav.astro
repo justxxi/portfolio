@@ -1,26 +1,18 @@
----
-type NavLink = { label: string; href: string }
-
-const links: readonly NavLink[] = [
-  { label: 'projects', href: '#projects' },
-  { label: 'about', href: '#about' },
-  { label: 'contact', href: '#contact' }
-] as const
+﻿---
+const links: readonly { label: string; href: string }[] = [
+  { label: 'Selected works', href: '#works' },
+  { label: 'About', href: '#about' },
+  { label: 'Get in touch', href: '#contact' }
+]
 ---
 <header class="nav" data-nav data-scrolled="false" role="banner">
+  <span class="nav__progress" aria-hidden="true"></span>
   <div class="nav__inner">
-    <a class="nav__mark" href="#top" aria-label="justxxi, return to top">
-      <span class="nav__dot"></span>
-      <span class="nav__title font-display">justxxi</span>
-    </a>
-
-    <nav class="nav__links" aria-label="primary">
+    <a class="nav__mark serif" href="#top" aria-label="justxxi, return to top">justxxi</a>
+    <nav class="nav__links" aria-label="Primary">
       {links.map((link) => (
-        <a class="nav__link" href={link.href}>{link.label}</a>
+        <a class="link-line" href={link.href}>{link.label}</a>
       ))}
-      <button class="cmd-trigger font-mono" id="cmd-trigger-btn" aria-label="Open search shortcut">
-        <span>⌘K</span>
-      </button>
     </nav>
   </div>
 </header>
@@ -31,19 +23,32 @@ const links: readonly NavLink[] = [
     top: 0;
     left: 0;
     right: 0;
-    height: 56px;
+    height: var(--nav-h);
     z-index: 100;
-    background: rgba(15, 14, 13, 0.75);
-    backdrop-filter: saturate(180%) blur(16px);
-    -webkit-backdrop-filter: saturate(180%) blur(16px);
-    border-bottom: 1px solid var(--color-line-soft);
-    transition: all 0.4s var(--ease-smooth);
+    background: rgba(20, 17, 16, 0);
+    border-bottom: 1px solid rgba(234, 228, 216, 0);
+    transition:
+      background-color 0.45s var(--ease-out),
+      border-color 0.45s var(--ease-out);
   }
 
   .nav[data-scrolled='true'] {
-    background: rgba(15, 14, 13, 0.94);
-    border-bottom-color: rgba(200, 90, 60, 0.25);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    background: rgba(20, 17, 16, 0.82);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    border-bottom-color: var(--color-line-soft);
+  }
+
+  .nav__progress {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
   }
 
   .nav__inner {
@@ -58,61 +63,19 @@ const links: readonly NavLink[] = [
   }
 
   .nav__mark {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    color: var(--color-ink);
-    text-decoration: none;
-  }
-
-  .nav__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    box-shadow: 0 0 10px var(--color-accent);
-  }
-
-  .nav__title {
-    font-size: 1.15rem;
-    letter-spacing: -0.01em;
-    font-weight: 700;
-    color: var(--color-ink);
+    font-size: 1.35rem;
+    letter-spacing: 0.005em;
   }
 
   .nav__links {
     display: flex;
     align-items: center;
-    gap: clamp(1rem, 2.5vw, 2rem);
+    gap: clamp(1.25rem, 3vw, 2.5rem);
   }
 
-  .nav__link {
-    color: var(--color-ink-muted);
-    font-size: 0.875rem;
-    font-weight: 400;
-    transition: color 0.25s var(--ease-smooth);
-  }
-
-  .nav__link:hover {
-    color: var(--color-ink);
-  }
-
-  .cmd-trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem 0.55rem;
-    font-size: 0.72rem;
-    color: var(--color-ink-muted);
-    background: rgba(245, 240, 232, 0.05);
-    border: 1px solid var(--color-line);
-    border-radius: 6px;
-    transition: all 0.25s var(--ease-smooth);
-  }
-
-  .cmd-trigger:hover {
-    background: rgba(200, 90, 60, 0.15);
-    color: var(--color-accent-hover);
-    border-color: rgba(200, 90, 60, 0.3);
+  @media (max-width: 640px) {
+    .nav__links .link-line:first-child {
+      display: none;
+    }
   }
 </style>

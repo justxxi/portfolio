@@ -1,165 +1,84 @@
+﻿---
+const email = 'wyurtrft@proton.me'
 ---
-type Link = {
-  label: string
-  value: string
-  href: string
-  hint: string
-  action?: string
-}
-
-const links: readonly Link[] = [
-  { 
-    label: 'Email', 
-    value: 'wyurtrft@proton.me', 
-    href: 'mailto:wyurtrft@proton.me', 
-    hint: 'preferred for work inquiries (click to copy)',
-    action: 'copy'
-  },
-  { 
-    label: 'GitHub', 
-    value: 'github.com/justxxi', 
-    href: 'https://github.com/justxxi', 
-    hint: 'open source work & repositories'
-  }
-] as const
----
-<section class="contact" id="contact" data-section aria-labelledby="contact-title">
+<section class="contact" id="contact" aria-labelledby="contact-title">
   <div class="wrap">
-    <header class="section-head">
-      <p class="eyebrow">contact</p>
-      <h2 class="section-title text-h2 font-display will-split" id="contact-title">
-        Get in touch<span class="accent-dot">.</span>
-      </h2>
-      <p class="section-sub text-lead">
-        Open to remote engineering roles, backend contracts, and technical collaborations.
-      </p>
-    </header>
+    <h2 class="contact__title serif" id="contact-title">
+      <span class="mask"><span class="mask__inner" data-reveal>Correspondence</span></span>
+    </h2>
+    <p class="contact__sub" data-fade>
+      Open to remote engineering roles, backend contracts and technical collaborations.
+    </p>
 
-    <div class="contact__grid">
-      {links.map((link) => (
-        <a
-          class="contact-card card"
-          href={link.href}
-          data-copy={link.action === 'copy' ? link.value : undefined}
-          target={link.href.startsWith('mailto:') ? undefined : '_blank'}
-          rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-          aria-label={`${link.label}: ${link.value}`}
-        >
-          <div class="contact-card__top">
-            <span class="contact-card__label font-mono">{link.label}</span>
-            <span class="contact-card__arrow" aria-hidden="true">→</span>
-          </div>
-          <p class="contact-card__value font-display">{link.value}</p>
-          <p class="contact-card__hint">{link.hint}</p>
-        </a>
-      ))}
+    <button class="email" type="button" data-copy-email={email} data-fade>
+      <span class="email__text serif">{email}</span>
+      <span class="email__hint label">Click to copy</span>
+    </button>
+    <div class="hairline email__rule" data-line></div>
+
+    <div class="contact__links" data-fade>
+      <span class="label">Elsewhere</span>
+      <a class="link-line" href="https://github.com/justxxi" target="_blank" rel="noopener noreferrer">
+        github.com/justxxi</a>
     </div>
   </div>
 </section>
 
-<div class="toast" id="copy-toast" role="status" aria-live="polite">
-  <span style="color: var(--color-accent);">●</span>
-  <span>Email copied to clipboard!</span>
-</div>
-
-<script>
-  const copyCard = document.querySelector('[data-copy]')
-  const toast = document.getElementById('copy-toast')
-
-  if (copyCard && toast) {
-    copyCard.addEventListener('click', (e) => {
-      const email = copyCard.getAttribute('data-copy')
-      if (email) {
-        navigator.clipboard.writeText(email).then(() => {
-          toast.classList.add('show')
-          setTimeout(() => {
-            toast.classList.remove('show')
-          }, 2800)
-        })
-      }
-    })
-  }
-</script>
-
 <style>
   .contact {
     padding-block: var(--section-gap);
+    border-top: 1px solid var(--color-line-soft);
   }
 
-  .section-head {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: clamp(3rem, 6vw, 4.5rem);
-  }
-
-  .section-title {
-    color: var(--color-ink);
-    max-width: 22ch;
-  }
-
-  .accent-dot {
-    color: var(--color-accent);
-  }
-
-  .section-sub {
-    color: var(--color-ink-muted);
-    max-width: 44ch;
-  }
-
-  .contact__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: clamp(1.2rem, 2vw, 2rem);
-    max-width: 880px;
-    margin-inline: auto;
-  }
-
-  .contact-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    cursor: pointer;
-    color: var(--color-ink);
-    text-decoration: none;
-  }
-
-  .contact-card__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .contact-card__label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-accent);
-  }
-
-  .contact-card__arrow {
-    color: var(--color-accent);
-    font-size: 1.1rem;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-
-  .contact-card:hover .contact-card__arrow {
-    transform: translateX(4px);
-    color: var(--color-accent-hover);
-  }
-
-  .contact-card__value {
-    font-size: clamp(1.35rem, 2vw, 1.75rem);
-    font-weight: 600;
+  .contact__title {
+    font-size: clamp(3rem, 9vw, 7.5rem);
+    line-height: 1;
     letter-spacing: -0.01em;
-    color: var(--color-ink);
   }
 
-  .contact-card__hint {
-    font-size: var(--text-sm);
-    color: var(--color-ink-muted);
+  .contact__sub {
+    margin-top: clamp(1.25rem, 3vh, 2rem);
+    max-width: 44ch;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--color-bone-muted);
+  }
+
+  .email {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-top: clamp(2.5rem, 6vh, 4.5rem);
+    padding-bottom: 0.85rem;
+  }
+
+  .email__text {
+    display: inline-block;
+    font-size: clamp(1.8rem, 6.5vw, 5.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    transition:
+      color 0.4s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+
+  .email:hover .email__text {
+    color: var(--color-accent);
+    transform: translateX(10px);
+  }
+
+  .email__hint {
+    display: block;
+    margin-top: 0.75rem;
+  }
+
+  .email__rule {
+    margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
+  }
+
+  .contact__links {
+    display: flex;
+    align-items: baseline;
+    gap: 1.75rem;
   }
 </style>

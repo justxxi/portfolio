@@ -1,136 +1,103 @@
----
+﻿---
 ---
 <section class="hero" id="top" aria-labelledby="hero-title">
-  <div class="hero__glow" aria-hidden="true"></div>
-
-  <div class="hero__inner">
-    <div class="badge-status">
-      <span class="badge-status__dot"></span>
-      <span>Middle Full-Stack &amp; AI Engineer &bull; 3+ years experience</span>
-    </div>
-
-    <h1 class="hero__title font-display" id="hero-title">
-      Full-Stack &amp; AI Engineer<span class="accent-dot">.</span>
+  <div class="wrap hero__inner">
+    <h1 class="hero__title serif" id="hero-title">
+      <span class="mask"><span class="mask__inner" data-hero-line>Full-stack <em>&amp;</em></span></span>
+      <span class="mask"><span class="mask__inner" data-hero-line><em>AI</em> engineer</span></span>
     </h1>
 
-    <p class="hero__lead text-lead">
-      Hey, I&rsquo;m <strong class="text-white">justxxi</strong>. Full-stack developer with 3+ years of experience. I build web applications, cloud backends, and fine-tune custom AI models using <strong class="text-white">Python</strong>, <strong class="text-white">Go</strong>, and <strong class="text-white">TypeScript</strong>.
-    </p>
-
-    <div class="hero__actions">
-      <a class="pill pill--primary" href="#projects">
-        <span>View repositories</span>
-        <span class="arrow" aria-hidden="true">→</span>
-      </a>
-      <a class="pill pill--ghost" href="#contact">
-        Get in touch
-      </a>
-      <button class="pill pill--ghost" id="hero-cmd-btn" aria-label="Open command palette">
-        <span class="font-mono">⌘K Search</span>
-      </button>
+    <div class="hero__foot">
+      <p class="hero__lead" data-fade>
+        I&rsquo;m justxxi. I build web applications, cloud backends and custom AI
+        models with Python, Go and TypeScript.
+      </p>
+      <div class="hero__actions" data-fade>
+        <a class="btn-solid" href="#works" data-magnet>
+          <span>Selected works</span>
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="link-line" href="#contact">Get in touch</a>
+      </div>
     </div>
 
-    <div class="terminal-window" id="hero-terminal">
-      <div class="terminal-header">
-        <div class="terminal-dots">
-          <span class="terminal-dot dot-red"></span>
-          <span class="terminal-dot dot-yellow"></span>
-          <span class="terminal-dot dot-green"></span>
-        </div>
-        <span class="terminal-title font-mono">bash &bull; justxxi@dev:~</span>
-        <span class="terminal-title font-mono" style="opacity:0.5;">github-cli</span>
-      </div>
-      <div class="terminal-body">
-        <div class="terminal-line">
-          <span class="terminal-prompt">$</span>
-          <span class="terminal-cmd">gh repo list justxxi --limit 5</span>
-        </div>
-        <div class="terminal-line terminal-out">
-          <span>Fetching live repositories from GitHub API...</span>
-        </div>
-        <div class="terminal-line terminal-out">
-          <span class="terminal-highlight">✓ Repositories synced. Ready for deployment.</span>
-        </div>
-      </div>
+    <div class="hero__meta" data-fade>
+      <span class="label">&copy;MMXXVI</span>
+      <span class="hero__meta-time label">Local time&nbsp;<span class="mono" id="clock">00:00:00</span></span>
+      <span class="label">Remote &middot; Worldwide</span>
     </div>
   </div>
 </section>
 
 <style>
   .hero {
-    position: relative;
-    min-height: 92dvh;
-    display: grid;
-    place-items: center;
-    padding: clamp(7.5rem, 15vh, 9.5rem) var(--page-pad) clamp(4rem, 8vh, 6rem);
-    text-align: center;
-    background: var(--color-ground);
-    overflow: hidden;
-  }
-
-  .hero__glow {
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 700px;
-    height: 500px;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200, 90, 60, 0.12) 0%, rgba(200, 90, 60, 0.02) 60%, transparent 80%);
-    filter: blur(60px);
-    pointer-events: none;
-    z-index: 0;
+    min-height: 100dvh;
+    display: flex;
   }
 
   .hero__inner {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: clamp(1.2rem, 2.5vw, 1.75rem);
-    max-width: 860px;
+    justify-content: flex-end;
+    padding-top: calc(var(--nav-h) + clamp(2rem, 8vh, 5rem));
+    padding-bottom: clamp(1.5rem, 4vh, 2.75rem);
+    gap: clamp(2rem, 5vh, 3.5rem);
   }
 
   .hero__title {
-    font-size: clamp(2.8rem, 6.5vw, 5rem);
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-    color: var(--color-ink);
-    margin: 0;
-    font-weight: 700;
+    font-size: clamp(3.4rem, 11.5vw, 9.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+    margin-top: auto;
   }
 
-  .text-white { color: #ffffff; }
+  .hero__title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-accent-bright);
+  }
 
-  .accent-dot {
-    color: var(--color-accent);
+  .hero__foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    flex-wrap: wrap;
   }
 
   .hero__lead {
-    color: var(--color-ink-muted);
-    max-width: 50ch;
-    margin-top: 0.25rem;
-    font-size: var(--text-lead);
-    line-height: 1.6;
+    max-width: 42ch;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-bone-muted);
   }
 
   .hero__actions {
     display: flex;
-    gap: 0.85rem;
-    margin-top: clamp(0.75rem, 2vw, 1.25rem);
+    align-items: center;
+    gap: clamp(1.25rem, 2.5vw, 2rem);
     flex-wrap: wrap;
-    justify-content: center;
   }
 
-  .hero__actions .arrow {
-    transition: transform 0.3s var(--ease-smooth);
+  .hero__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-line-soft);
   }
 
-  .hero__actions .pill--primary:hover .arrow {
-    transform: translateX(4px);
+  .hero__meta .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--color-bone);
   }
 
-  #hero-terminal {
-    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  @media (max-width: 640px) {
+    .hero__meta span:nth-child(2) {
+      display: none;
+    }
   }
 </style>

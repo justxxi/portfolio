@@ -1,12 +1,12 @@
-{
+﻿{
   "name": "justxxi",
   "short_name": "justxxi",
-  "description": "justxxi — Middle Full-Stack & AI Engineer. Python, Go, TypeScript, Cloud & DevOps.",
+  "description": "justxxi - Full-stack and AI engineer. Python, Go, TypeScript.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0f0e0d",
-  "theme_color": "#0f0e0d",
+  "background_color": "#141110",
+  "theme_color": "#141110",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "/touch-icon.svg", "sizes": "180x180", "type": "image/svg+xml", "purpose": "any" }
